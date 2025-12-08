@@ -1,5 +1,5 @@
 import sys
-sys.path.append(r"E:\Courses\cold-email-automation")
+sys.path.append(r"E:\Courses\Cold-Email-Automation")
 import streamlit as st
 from langchain_community.document_loaders import WebBaseLoader
 from app.chain import Chain
@@ -7,30 +7,86 @@ from app.portfolio import Portfolio
 from app.utils import clean_text
 
 def create_streamlit_app(llm, portfolio, clean_text):
-    st.title("📧 Cold Mail Generator")
-    url_input = st.text_input("Enter a URL:", value="https://jobs.nike.com/job/R-33460")
-    submit_button = st.button("Submit")
+    # Page configuration
+    st.set_page_config(
+        page_title="📧 Cold Email Generator",
+        page_icon="📧",
+        layout="wide"
+    )
+    
+    # Sidebar for inputs
+    st.sidebar.header("🔧 Input Settings")
+    input_choice = st.sidebar.radio("Choose Input Type:", ["Job URL", "Paste Job Description"])
+    
+    url_input = ""
+    jd_input = ""
+    if input_choice == "Job URL":
+        url_input = st.sidebar.text_input("Enter a Job URL:", value="https://jobs.nike.com/job/R-33460")
+    else:
+        jd_input = st.sidebar.text_area("Paste the Job Description here:", height=200)
+    
+    max_emails = st.sidebar.slider("Number of Emails to Generate", 1, 5, 1)
+    submit_button = st.sidebar.button("Generate Email")
+    
+    # Main content
+    st.title("📧 Cold Email Generator")
+    st.markdown("""
+        Welcome! This app extracts job requirements from a URL or a pasted Job Description, 
+        matches your portfolio skills, and generates a professional cold email tailored for the role.
+    """)
 
     if submit_button:
-        try:
-            loader = WebBaseLoader([url_input])
-            data = clean_text(loader.load().pop().page_content)
-            portfolio.load_portfolio()
-            jobs = llm.extract_jobs(data)
-            for job in jobs:
-                skills = job.get('skills', [])
-                links = portfolio.query_links(skills)
-                email = llm.write_mail(job, links)
-                st.code(email, language='markdown')
-        except Exception as e:
-            st.error(f"An Error Occurred: {e}")
-
+        with st.spinner("Processing... ⏳"):
+            try:
+                # Determine data source
+                if input_choice == "Job URL":
+                    if not url_input.strip():
+                        st.error("Please enter a valid URL.")
+                        return
+                    loader = WebBaseLoader([url_input])
+                    page_content = loader.load().pop().page_content
+                    data = clean_text(page_content)
+                else:
+                    if not jd_input.strip():
+                        st.error("Please paste a valid Job Description.")
+                        return
+                    data = clean_text(jd_input)
+                
+                # Load portfolio once
+                portfolio.load_portfolio()
+                
+                # Extract jobs and generate emails
+                jobs = llm.extract_jobs(data)
+                
+                if not jobs:
+                    st.warning("No jobs found in the provided input.")
+                
+                for _ in range(max_emails):
+                    for job in jobs:
+                        
+                        # st.subheader(f"💼 Job {i+1}: {job.get('title', 'Unknown Title')}")
+                        
+                        # Show job description
+                        with st.expander("Job Description"):
+                            st.write(job.get('description', 'No description available.'))
+                        
+                        # Show required skills
+                        skills = job.get('skills', [])
+                        # Match portfolio links
+                        links = portfolio.query_links(skills)
+                        
+                        # Generate email
+                        email = llm.write_mail(job, links)
+                        st.markdown("**Generated Cold Email:**")
+                        st.code(email, language='markdown')
+                        
+                        st.markdown("---")
+                        break
+            
+            except Exception as e:
+                st.error(f"An Error Occurred: {e}")
 
 if __name__ == "__main__":
     chain = Chain()
     portfolio = Portfolio()
-    st.set_page_config(layout="wide", page_title="Cold Email Generator", page_icon="📧")
     create_streamlit_app(chain, portfolio, clean_text)
-    
-    
-# streamlit run app/main.py

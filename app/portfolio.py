@@ -20,3 +20,4 @@ class Portfolio:
         result = self.collection.query(query_texts=skills, n_results=5)
         return dict(zip([res['links'] for res in result['metadatas'][0]], result['documents'][0]))
     
+
