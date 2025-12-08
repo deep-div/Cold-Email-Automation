@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 📧 Cold Email Generator
 
 A powerful cold email automation tool built using **Groq**, **LangChain**, and **Streamlit**.
