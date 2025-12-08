@@ -9,6 +9,9 @@ wheels/
 # Virtual environments
 .venv
 
+# Env file
+.env
+
 # Vector store
 \vectorstore
 
