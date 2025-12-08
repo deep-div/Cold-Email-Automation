@@ -14,7 +14,7 @@ class Chain:
         logger.debug(f"GROQ_API_KEY Loaded: {bool(groq_key)}")
 
         self.llm = ChatGroq(
-            temperature=0.3,
+            temperature=1,
             groq_api_key=groq_key,
             model_name="llama-3.3-70b-versatile"
         )
