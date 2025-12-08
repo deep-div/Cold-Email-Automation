@@ -1,0 +1,159 @@
+Techstack,Links
+"React, Node.js, MongoDB",https://example.com/react-portfolio
+"Angular, .NET, SQL Server",https://example.com/angular-portfolio
+"Vue.js, Ruby on Rails, PostgreSQL",https://example.com/vue-portfolio
+"Python, Django, MySQL",https://example.com/python-portfolio
+"Java, Spring Boot, Oracle",https://example.com/java-portfolio
+"Flutter, Firebase, GraphQL",https://example.com/flutter-portfolio
+"WordPress, PHP, MySQL",https://example.com/wordpress-portfolio
+"Magento, PHP, MySQL",https://example.com/magento-portfolio
+"React Native, Node.js, MongoDB",https://example.com/react-native-portfolio
+"iOS, Swift, Core Data",https://example.com/ios-portfolio
+"Android, Java, Room Persistence",https://example.com/android-portfolio
+"Kotlin, Android, Firebase",https://example.com/kotlin-android-portfolio
+"Full-stack, JavaScript, Express.js",https://example.com/full-stack-js-portfolio
+"TypeScript, Angular Frontend",https://example.com/typescript-frontend-portfolio
+"Backend, Kotlin, Spring Boot",https://example.com/kotlin-backend-portfolio
+"Machine Learning, Python, TensorFlow",https://example.com/ml-python-portfolio
+"DevOps, Jenkins, Docker",https://example.com/devops-portfolio
+"AWS, Terraform, Kubernetes",https://example.com/aws-k8s-portfolio
+"Azure, CI/CD, AKS",https://example.com/azure-devops-portfolio
+"Google Cloud, BigQuery, Firebase",https://example.com/gcp-portfolio
+"Cybersecurity, PenTesting, Kali Linux",https://example.com/cybersecurity-portfolio
+"Blockchain, Solidity, Web3.js",https://example.com/blockchain-portfolio
+"Ethereum Smart Contracts, Hardhat",https://example.com/eth-contracts-portfolio
+"Data Engineering, Airflow, Spark",https://example.com/data-engineering-portfolio
+"Data Science, Pandas, Scikit-Learn",https://example.com/datascience-portfolio
+"Computer Vision, YOLO, OpenCV",https://example.com/cv-portfolio
+"NLP, Transformers, HuggingFace",https://example.com/nlp-portfolio
+"Video Editing, Adobe Premiere Pro",https://example.com/videoediting-portfolio
+"Motion Graphics, After Effects",https://example.com/motion-design-portfolio
+"3D Animation, Blender",https://example.com/blender-portfolio
+"SEO, Keyword Research, Ahrefs",https://example.com/seo-portfolio
+"SMM, Instagram, Meta Ads",https://example.com/smm-portfolio
+"Content Marketing, Copywriting",https://example.com/content-marketing-portfolio
+"Email Marketing, Mailchimp, CRM",https://example.com/email-marketing-portfolio
+"UI/UX Design, Figma, Prototyping",https://example.com/uiux-portfolio
+"Graphic Design, Photoshop, Illustrator",https://example.com/graphics-portfolio
+"Game Development, Unity, C#",https://example.com/unity-portfolio
+"Game Development, Unreal Engine",https://example.com/unreal-portfolio
+"AR/VR, ARCore, ARKit",https://example.com/arvr-portfolio
+"IoT, ESP32, MQTT",https://example.com/iot-portfolio
+"Embedded Systems, C, ARM",https://example.com/embedded-portfolio
+"RPA, UiPath, Automation Anywhere",https://example.com/rpa-portfolio
+"Testing, Selenium, Cypress",https://example.com/testing-portfolio
+"Chatbot Development, Rasa, Dialogflow",https://example.com/chatbot-portfolio
+"E-commerce, Shopify",https://example.com/shopify-portfolio
+"E-commerce, WooCommerce",https://example.com/woocommerce-portfolio
+"CRM, Salesforce",https://example.com/salesforce-portfolio
+"ERP, SAP Solutions",https://example.com/sap-portfolio
+"Power BI, Data Visualization",https://example.com/powerbi-portfolio
+"BI & Analytics, Tableau",https://example.com/tableau-portfolio
+"Streaming Apps, RTMP/WebRTC",https://example.com/webrtc-portfolio
+"Video Production, DaVinci Resolve",https://example.com/video-production-portfolio
+"Podcast Editing, Audition",https://example.com/podcast-portfolio
+Social Media Influencer Marketing,https://example.com/influencer-portfolio
+"Branding, Logo Design",https://example.com/branding-portfolio
+"Next.js, Prisma, PostgreSQL",https://example.com/nextjs-portfolio
+"Svelte, Supabase, Tailwind",https://example.com/svelte-portfolio
+"Nuxt.js, Laravel, MySQL",https://example.com/nuxt-laravel-portfolio
+"Electron.js, SQLite",https://example.com/electron-portfolio
+"Three.js, WebGL",https://example.com/3d-web-portfolio
+"Web Accessibility, WCAG AA",https://example.com/a11y-portfolio
+"Microservices, gRPC, Redis",https://example.com/microservices-portfolio
+"API Development, FastAPI",https://example.com/fastapi-portfolio
+"C++, REST SDK, Docker",https://example.com/cpp-backend-portfolio
+"GoLang, gRPC, Kubernetes",https://example.com/golang-portfolio
+"Rust, Actix, PostgreSQL",https://example.com/rust-backend-portfolio
+"Scala, Akka, Kafka",https://example.com/scala-portfolio
+"Node.js, Serverless, DynamoDB",https://example.com/serverless-portfolio
+"Enterprise Dev, .NET Core, Azure AD",https://example.com/enterprise-dotnet-portfolio
+"PHP, CodeIgniter",https://example.com/codeigniter-portfolio
+"CMS Development, Drupal",https://example.com/drupal-portfolio
+"Static Sites, Hugo",https://example.com/hugo-portfolio
+Mobile Payments Integration,https://example.com/mobile-payments-portfolio
+WearOS Development,https://example.com/wearos-portfolio
+watchOS Development,https://example.com/watchos-portfolio
+Unity AR Development,https://example.com/unity-ar-portfolio
+Unreal VR Training Apps,https://example.com/vr-training-portfolio
+AI Chatbot API Integration,https://example.com/ai-chatbot-portfolio
+"LLM Finetuning, RAG, Vector DB",https://example.com/rag-portfolio
+"Data Lakes, Snowflake",https://example.com/snowflake-portfolio
+"ETL, Informatica",https://example.com/informatica-portfolio
+"Big Data, Hadoop",https://example.com/hadoop-portfolio
+"Data Warehousing, Redshift",https://example.com/redshift-portfolio
+"MLOps, MLflow, DVC",https://example.com/mlops-portfolio
+"Deep Learning, PyTorch",https://example.com/pytorch-portfolio
+"Speech Recognition, ASR Models",https://example.com/asr-portfolio
+"Reinforcement Learning, Gym",https://example.com/rl-portfolio
+"AIOps, Monitoring, Prometheus",https://example.com/aiops-portfolio
+"Cloud Security, IAM, Zero Trust",https://example.com/cloud-security-portfolio
+"Security Automation, SIEM",https://example.com/siem-portfolio
+"Bug Bounty, WebSec",https://example.com/web-security-portfolio
+"Blockchain, Polygon dApps",https://example.com/polygon-portfolio
+"NFT Marketplace, IPFS",https://example.com/nft-portfolio
+Hyperledger Fabric,https://example.com/hyperledger-portfolio
+"DeFi, Smart Contract Audits",https://example.com/defi-portfolio
+"IoT Cloud, AWS IoT Core",https://example.com/aws-iot-portfolio
+"Edge Computing, 5G IoT",https://example.com/edge-portfolio
+"Robotics, ROS",https://example.com/robotics-portfolio
+"Home Automation, Smart Devices",https://example.com/smart-home-portfolio
+Automotive Infotainment Apps,https://example.com/automotive-portfolio
+Drone Control Software,https://example.com/drone-portfolio
+"CI/CD, GitHub Actions",https://example.com/github-actions-portfolio
+"Monitoring, Grafana",https://example.com/grafana-portfolio
+"Testing Automation, Appium",https://example.com/appium-portfolio
+"Load Testing, JMeter",https://example.com/jmeter-portfolio
+Localization & Internationalization,https://example.com/l10n-i18n-portfolio
+"CRM Dev, Zoho Integration",https://example.com/zoho-portfolio
+Atlassian Plugins (Jira/Confluence),https://example.com/jira-portfolio
+"Helpdesk Systems, Freshdesk API",https://example.com/helpdesk-portfolio
+"Warehouse Automation, RFID Systems",https://example.com/rfid-portfolio
+Healthcare HIPAA Software,https://example.com/healthcare-portfolio
+FinTech UPI / Payment Gateway,https://example.com/fintech-portfolio
+EdTech LMS Development,https://example.com/edtech-portfolio
+E-learning SCORM Solutions,https://example.com/scorm-portfolio
+Logistics / Fleet Management,https://example.com/logistics-portfolio
+"Restaurant POS, QR Ordering",https://example.com/restaurant-portfolio
+"Real Estate Portal, 3D Viewers",https://example.com/real-estate-portfolio
+Travel & Booking Software,https://example.com/travel-portfolio
+"OTT Platforms, Streaming Apps",https://example.com/ott-portfolio
+News & Media CMS,https://example.com/media-portfolio
+Retail Store Automation,https://example.com/retail-portfolio
+HR Management System,https://example.com/hrms-portfolio
+Inventory Management System,https://example.com/inventory-portfolio
+ERP Custom Modules,https://example.com/erp-modules-portfolio
+AI-based Recommendation Engines,https://example.com/recommendation-portfolio
+SEO Technical Audit,https://example.com/seo-audit-portfolio
+SEO Onpage + Offpage,https://example.com/seo-execution-portfolio
+"SEM, Google Ads Campaigns",https://example.com/google-ads-portfolio
+Affiliate Marketing Setup,https://example.com/affiliate-portfolio
+"Video SEO, Content Ranking",https://example.com/video-seo-portfolio
+YouTube Channel Management,https://example.com/youtube-management-portfolio
+Product Photography Editing,https://example.com/photo-edit-portfolio
+Green Screen Editing,https://example.com/greenscreen-portfolio
+Cinematic Color Grading,https://example.com/color-grading-portfolio
+Music Video Post Production,https://example.com/music-video-portfolio
+Influencer Video Content Creation,https://example.com/influencer-content-portfolio
+Full Brand Marketing Strategy,https://example.com/brand-strategy-portfolio
+Podcast Video Production,https://example.com/podcast-video-portfolio
+Corporate Video Shoots,https://example.com/corporate-video-portfolio
+"Motion Posters, Promo Videos",https://example.com/promo-video-portfolio
+"Email Automation, Klaviyo",https://example.com/klaviyo-portfolio
+Lead Generation Funnels,https://example.com/lead-gen-portfolio
+Landing Page CRO,https://example.com/conversion-portfolio
+App Store Optimization,https://example.com/aso-portfolio
+Game UI/UX Design,https://example.com/game-ui-portfolio
+Metaverse Experiences,https://example.com/metaverse-portfolio
+Crypto Wallet Development,https://example.com/crypto-wallet-portfolio
+Custom Analytics Dashboards,https://example.com/analytics-portfolio
+Enterprise Compliance Tools,https://example.com/compliance-portfolio
+GovTech Public Platforms,https://example.com/govtech-portfolio
+Vehicle Tracking GPS Apps,https://example.com/gps-portfolio
+Hospital Management Software,https://example.com/hms-portfolio
+Telemedicine Solutions,https://example.com/telemedicine-portfolio
+AI Document Processing (OCR),https://example.com/ocr-portfolio
+SaaS Subscription Platforms,https://example.com/saas-portfolio
+No-Code / Low-Code Apps (Bubble),https://example.com/nocode-portfolio
+ChatGPT API powered apps,https://example.com/chatgpt-portfolio
+"Interactive Dashboards, D3.js",https://example.com/d3-portfolio
