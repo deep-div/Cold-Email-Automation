@@ -8,5 +8,3 @@ services:
       - "8501:8501"                 # host:container port mapping
     environment:
       PYTHONPATH: /Cold-Email-Automation
-    volumes:
-      - ./app:/Cold-Email-Automation/app   # mount local code for live updates
