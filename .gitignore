@@ -12,8 +12,5 @@ wheels/
 # Env file
 .env
 
-# Vector store
-\vectorstore
-
 # tests
 \rough.ipynb
