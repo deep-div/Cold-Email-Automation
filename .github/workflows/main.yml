@@ -31,7 +31,7 @@ jobs:
   test:
     name: Run Tests
     runs-on: ubuntu-latest
-    needs: build   # Runs only if build succeeds
+    # needs: build   # Runs only if build succeeds
 
     steps:
       - name: Checkout code
