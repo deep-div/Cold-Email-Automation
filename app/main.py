@@ -23,7 +23,7 @@ def create_streamlit_app(llm, portfolio, clean_text):
     if input_choice == "Job URL":
         url_input = st.sidebar.text_input("Enter a Job URL:", value="https://jobs.nike.com/job/R-33460")
     else:
-        jd_input = st.sidebar.text_area("Paste the Job Description here:", height=200)
+        jd_input = st.sidebar.text_area("Paste the Job Description here:", value="Job Description – Generative AI / LLM Engineer: Seeking a talented Generative AI Engineer (1–4 yrs) to design, build, and optimize AI-driven solutions using LLMs, NLP pipelines, and intelligent automation; responsibilities include developing LLM-based applications (chatbots, document intelligence), implementing RAG pipelines with vector databases, fine-tuning open-source/proprietary models (Llama, Mistral, Falcon, GPT), creating FastAPI/Flask microservices for deployment, maintaining MLOps workflows with CI/CD and cloud, performing prompt engineering and evaluation, and working on multimodal AI; required skills: Python, NLP/LLMs, Transformers, Hugging Face, LangChain/LlamaIndex, vector DBs (Pinecone, FAISS, Chroma), Docker, Git, Linux, cloud (AWS/GCP/Azure); nice-to-have: CV/Speech AI, inference optimization (quantization, ONNX, vLLM), FastAPI+Gradio demos, Kubernetes, CI/CD; soft skills: communication, analytical thinking, ownership, teamwork; education: CS/AI/DS degree or equivalent; Location: Remote/Hybrid/On-site; Full-time role in fast-paced environment with innovation focus.", height=200)
     
     max_emails = st.sidebar.slider("Number of Emails to Generate", 1, 5, 1)
     submit_button = st.sidebar.button("Generate Email")
