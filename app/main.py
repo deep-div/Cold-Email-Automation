@@ -1,5 +1,3 @@
-import sys
-sys.path.append(r"E:\Courses\Cold-Email-Automation")
 import streamlit as st
 from langchain_community.document_loaders import WebBaseLoader
 from app.chain import Chain
@@ -90,3 +88,6 @@ if __name__ == "__main__":
     chain = Chain()
     portfolio = Portfolio()
     create_streamlit_app(chain, portfolio, clean_text)
+    
+    
+# py -m streamlit run app/main.py

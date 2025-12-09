@@ -7,26 +7,26 @@ on:
     branches: [ "main" ]
 
 jobs:
-  # build:
-  #   name: Build
-  #   runs-on: ubuntu-latest
+  build:
+    name: Build
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     # 1. Checkout repository
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
+    steps:
+      # 1. Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  #     # 2. Set up Python
-  #     - name: Set up Python
-  #       uses: actions/setup-python@v5
-  #       with:
-  #         python-version: "3.11"
+      # 2. Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
-  #     # 3. Install dependencies
-  #     - name: Install dependencies
-  #       run: |
-  #         python -m pip install --upgrade pip
-  #         pip install -r requirements.txt
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
   deploy:
     name: Deploy to Render
@@ -41,4 +41,5 @@ jobs:
         with:
           service_id: ${{ secrets.RENDER_SERVICE_ID }}
           api_key: ${{ secrets.RENDER_API_KEY }}
+          wait_deploy: true
           deployment_environment: 'production'
