@@ -21,4 +21,4 @@ ENV PYTHONPATH=/Cold-Email-Automation
 EXPOSE 8501
 
 # Start Streamlit app on port 8501
-CMD ["python -m streamlit", "run", "/Cold-Email-Automation/app/main.py", "--server.port=8501", "--server.address=0.0.0.0"]
+CMD ["python", "-m", "streamlit", "run", "app/main.py", "--server.port=8501", "--server.address=0.0.0.0"]
