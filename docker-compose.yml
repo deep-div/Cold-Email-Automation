@@ -5,8 +5,11 @@ services:
     build: .
     image: cold-email-app
     ports:
-      - "8501:8501"                 # host:container port mapping
+      - "8501:8501"
     environment:
       PYTHONPATH: /Cold-Email-Automation
     volumes:
-      - ./app:/Cold-Email-Automation/app   # mount local code for live updates
+      - app_data:/Cold-Email-Automation/app   # named volume
+
+volumes:
+  app_data:

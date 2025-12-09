@@ -2,7 +2,7 @@ import logging
 import sys
 
 def get_logger(name: str = "app_logger") -> logging.Logger:
-    level = logging.DEBUG
+    level = logging.INFO
 
     logger = logging.getLogger(name)
     logger.setLevel(level)
