@@ -9,8 +9,8 @@ wheels/
 # Virtual environments
 .venv
 
-# Vector store
-\vectorstore
-
 # tests
 \rough.ipynb
+
+# workflows
+*.github

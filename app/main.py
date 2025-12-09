@@ -90,4 +90,4 @@ if __name__ == "__main__":
     create_streamlit_app(chain, portfolio, clean_text)
     
     
-# py -m streamlit run app/main.py
+# python -m streamlit run app/main.py
