@@ -21,7 +21,7 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
-      - name: Build and start services with Docker Compose
+      - name: Build image
         run: docker compose -f docker/docker-compose.yml up --build -d
 
       # Smoke container name for test, and then image name
@@ -35,4 +35,4 @@ jobs:
           docker rm smoke
 
       - name: Push Docker image
-        run: docker push deep-div/cold-email-app:${{ github.sha }}
+        run: docker push deepdiv/cold-email-app:${{ github.sha }}

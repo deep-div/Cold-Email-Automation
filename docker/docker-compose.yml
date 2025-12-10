@@ -6,7 +6,7 @@ services:
     build:
       context: .. # Where docker will look into -> go one folder up from docker/ → Cold-Email-Automation/
       dockerfile: docker/Dockerfile
-    image: cold-email-app:latest
+    image: deepdiv/cold-email-app:latest
     ports:
       - "8501:8501"
     environment:
