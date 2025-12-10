@@ -8,8 +8,9 @@ WORKDIR /Cold-Email-Automation
 COPY requirements.txt ./requirements.txt
 COPY .env ./.env
 
-# Copy the app folder into container
+# Copy the app and tests folder into container
 COPY app ./app
+COPY tests ./tests
 
 # Install dependencies
 RUN pip install --no-cache-dir -r ./requirements.txt
