@@ -22,7 +22,7 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t deep-div/cold-email-app:${{ github.sha }} -f docker/dockerfile .
+        run: docker build -t deep-div/cold-email-app:${{ github.sha }} -f docker/Dockerfile .
 
       - name: Run tests inside Docker
         run: docker run --rm deep-div/cold-email-app:${{ github.sha }} python -m pytest tests/ --maxfail=1 --disable-warnings -q
