@@ -1,18 +1,18 @@
 # Use official Python 3.11 image as base
-FROM python:3.11
+FROM python:3.11-slim
 
 # Set working directory inside container
 WORKDIR /Cold-Email-Automation
 
 # Copy requirements first for caching
-COPY requirements.txt /Cold-Email-Automation/requirements.txt
-COPY .env /Cold-Email-Automation/.env
+COPY requirements.txt ./requirements.txt
+COPY .env ./.env
 
 # Copy the app folder into container
-COPY app /Cold-Email-Automation/app
+COPY app ./app
 
 # Install dependencies
-RUN pip install --no-cache-dir -r /Cold-Email-Automation/requirements.txt
+RUN pip install --no-cache-dir -r ./requirements.txt
 
 # Set PYTHONPATH for imports
 ENV PYTHONPATH=/Cold-Email-Automation
