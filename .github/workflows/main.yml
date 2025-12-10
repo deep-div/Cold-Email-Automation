@@ -126,7 +126,7 @@ jobs:
         run: docker push deepdiv/cold-email-app:${{ github.sha }}
 
   # ========================
-  # Deploy to Render (CD)
+  # Deploy to Azure
   # ========================
   deploy:
     name: Deploy to Azure Web App
