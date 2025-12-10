@@ -22,7 +22,7 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
       - name: Build and start services with Docker Compose
-        run: docker-compose -f docker/docker-compose.yml up --build -d
+        run: docker compose -f docker/docker-compose.yml up --build -d
 
       - name: Run tests inside Docker
         run: docker run --rm deep-div/cold-email-app:${{ github.sha }} python -m pytest tests/ --maxfail=1 --disable-warnings -q
