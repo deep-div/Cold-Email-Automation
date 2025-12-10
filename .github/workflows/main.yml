@@ -27,12 +27,12 @@ jobs:
       # Smoke container name for test, and then image name
       - name: Smoke Test - Container Starts Correctly
         run: |
-          docker run -d --name smoke deep-div/cold-email-app:${{ github.sha }}   
+          docker run -d --name smoke deepdiv/cold-email-app:${{ github.sha }}   
           sleep 5
           docker logs smoke
           docker ps -a | grep smoke
           docker stop smoke
           docker rm smoke
 
-      # - name: Push Docker image
-      #   run: docker push deep-div/cold-email-app:${{ github.sha }}
+      - name: Push Docker image
+        run: docker push deep-div/cold-email-app:${{ github.sha }}
