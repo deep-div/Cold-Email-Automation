@@ -24,6 +24,9 @@ jobs:
       - name: Build image
         run: docker compose -f docker/docker-compose.yml up --build -d
 
+      - name: Tag image with SHA
+        run: docker tag deepdiv/cold-email-app:latest deepdiv/cold-email-app:${{ github.sha }}
+      
       # Smoke container name for test, and then image name
       - name: Smoke Test - Container Starts Correctly
         run: |
