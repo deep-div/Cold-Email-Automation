@@ -2,14 +2,12 @@ version: "3.9"
 
 services:
   app:
-    build: .
-    image: cold-email-app
+    container_name: cold-email-app-container 
+    build:
+      context: .. # Where docker will look into -> go one folder up from docker/ → Cold-Email-Automation/
+      dockerfile: docker/Dockerfile
+    image: cold-email-app:latest
     ports:
       - "8501:8501"
     environment:
       PYTHONPATH: /Cold-Email-Automation
-    volumes:
-      - app_data:/Cold-Email-Automation/app   # named volume
-
-volumes:
-  app_data:
