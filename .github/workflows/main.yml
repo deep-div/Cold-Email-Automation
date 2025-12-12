@@ -142,7 +142,7 @@ jobs:
         with:
           host: ${{ secrets.VM_PUBLIC_IP }}               # Azure VM public IP
           username: ${{ secrets.VM_USER }}           # e.g., azureuser
-          key: ${{ secrets.VM_PRIVATE_KEY }}         # Private SSH key
+          key: ${{ secrets.VM_SSH_PRIVATE_KEY }}         # Private SSH key
           port: 22
           script: |
             docker stop cold-email-app || true
