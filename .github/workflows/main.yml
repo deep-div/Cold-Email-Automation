@@ -145,8 +145,8 @@ jobs:
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}         # Private SSH key
           port: 22
           script: |
-            docker stop cold-email-app || true
-            docker rm cold-email-app || true
-            docker pull deepdiv/cold-email-app:2e2c40241ea3c3ab7cbdf382d36d20637667bc70
-            docker run -d --name cold-email-app -p 8501:8501 deepdiv/cold-email-app:2e2c40241ea3c3ab7cbdf382d36d20637667bc70
+            sudo docker stop cold-email-app || true
+            sudo docker rm cold-email-app || true
+            sudo docker pull deepdiv/cold-email-app:2e2c40241ea3c3ab7cbdf382d36d20637667bc70
+            sudo docker run -d --name cold-email-app -p 8501:8501 deepdiv/cold-email-app:2e2c40241ea3c3ab7cbdf382d36d20637667bc70
 
