@@ -147,6 +147,6 @@ jobs:
           script: |
             sudo docker stop cold-email-app || true
             sudo docker rm cold-email-app || true
-            sudo docker pull deepdiv/cold-email-app:${{ github.sha }}
-            sudo docker run -d --name cold-email-app -p 8501:8501 deepdiv/cold-email-app:${{ github.sha }}
+            sudo docker pull docker pull deepdiv/cold-email-app:2e2c40241ea3c3ab7cbdf382d36d20637667bc70
+            sudo docker run -d --name cold-email-app -p 8501:8501 docker pull deepdiv/cold-email-app:2e2c40241ea3c3ab7cbdf382d36d20637667bc70
 
