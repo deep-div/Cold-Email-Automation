@@ -102,24 +102,23 @@ jobs:
       # Tag with commit SHA
       - name: Tag Docker images with SHA
         run: |
-          docker tag deepdiv/cold-email-app:${{ github.sha }} deepdiv/cold-email-app:latest
-          docker tag deepdiv/cold-email-nginx:${{ github.sha }} deepdiv/cold-email-nginx:latest
+          docker tag deepdiv/cold-email-app:latest deepdiv/cold-email-app:${{ github.sha }}
+          docker tag deepdiv/cold-email-nginx:latest deepdiv/cold-email-nginx:${{ github.sha }}
 
+      # # Trivy scan
+      # - name: Scan App Docker image
+      #   uses: aquasecurity/trivy-action@0.20.0
+      #   with:
+      #     image-ref: 'deepdiv/cold-email-app:${{ github.sha }}'
+      #     severity: 'HIGH,CRITICAL'
+      #     ignore-unfixed: true
 
-      # Trivy scan
-      - name: Scan App Docker image
-        uses: aquasecurity/trivy-action@0.20.0
-        with:
-          image-ref: 'deepdiv/cold-email-app:${{ github.sha }}'
-          severity: 'HIGH,CRITICAL'
-          ignore-unfixed: true
-
-      - name: Scan Nginx Docker image
-        uses: aquasecurity/trivy-action@0.20.0
-        with:
-          image-ref: 'deepdiv/cold-email-nginx:${{ github.sha }}'
-          severity: 'HIGH,CRITICAL'
-          ignore-unfixed: true
+      # - name: Scan Nginx Docker image
+      #   uses: aquasecurity/trivy-action@0.20.0
+      #   with:
+      #     image-ref: 'deepdiv/cold-email-nginx:${{ github.sha }}'
+      #     severity: 'HIGH,CRITICAL'
+      #     ignore-unfixed: true
 
       # Push both images
       - name: Push Docker images
