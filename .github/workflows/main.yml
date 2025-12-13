@@ -97,7 +97,7 @@ jobs:
 
       # Build Docker image
       - name: Build Docker image
-        run: docker compose -f docker/docker-compose.yml up --build
+        run: docker compose -f docker/docker-compose.yml 
 
       # Docker security scan for both images
       - name: Scan App Docker image with Trivy
