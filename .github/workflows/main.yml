@@ -102,8 +102,9 @@ jobs:
       # Tag with commit SHA
       - name: Tag Docker images with SHA
         run: |
-          docker tag deepdiv/cold-email-app:${{ github.sha }}
-          docker tag deepdiv/cold-email-nginx:${{ github.sha }}
+          docker tag deepdiv/cold-email-app:${{ github.sha }} deepdiv/cold-email-app:latest
+          docker tag deepdiv/cold-email-nginx:${{ github.sha }} deepdiv/cold-email-nginx:latest
+
 
       # Trivy scan
       - name: Scan App Docker image
