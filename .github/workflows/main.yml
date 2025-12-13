@@ -103,10 +103,6 @@ jobs:
       - name: Tag Docker images with SHA
         run: |
           docker tag deepdiv/cold-email-app:latest deepdiv/cold-email-app:${{ github.sha }}
-          
-      # Tag with commit SHA
-      - name: Tag Docker images with SHA
-        run: |
           docker tag deepdiv/cold-email-nginx:latest deepdiv/cold-email-nginx:${{ github.sha }}
 
       # Trivy scan
@@ -123,12 +119,6 @@ jobs:
           image-ref: 'deepdiv/cold-email-nginx:${{ github.sha }}'
           severity: 'HIGH,CRITICAL'
           ignore-unfixed: true
-
-      # Push both images
-      - name: Push Docker images
-        run: |
-          docker push deepdiv/cold-email-app:${{ github.sha }}
-          docker push deepdiv/cold-email-nginx:${{ github.sha }}
 
       # Smoke test - App image
       - name: Smoke Test - App Container
