@@ -98,6 +98,9 @@ jobs:
       # Build all images
       - name: Build Docker images
         run: docker compose -f docker/docker-compose.yml build
+      
+      - name: Pull Nginx image
+        run: docker pull nginx:latest
 
       # Tag with commit SHA
       - name: Tag Docker images with SHA
