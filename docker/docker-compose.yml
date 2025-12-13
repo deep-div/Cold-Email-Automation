@@ -14,7 +14,7 @@ services:
 
   nginx:
     image: nginx:latest
-    container_name: nginx-container
+    container_name: deepdiv/cold-email-nginx
     ports:
       - "80:80"                       # external HTTP port
     volumes:
