@@ -175,6 +175,4 @@ jobs:
             sudo docker run -d --name nginx-container -p 80:80 --link cold-email-app:app deepdiv/cold-email-nginx:${{ github.sha }}
             sudo docker run -d --name cold-email-app deepdiv/cold-email-app:${{ github.sha }}
 
-            sudo docker system prune -f
-
 
