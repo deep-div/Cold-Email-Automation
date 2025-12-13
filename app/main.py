@@ -90,4 +90,5 @@ if __name__ == "__main__":
     create_streamlit_app(chain, portfolio, clean_text)
     
     
-# python -m streamlit run app/main.py
+# python -m streamlit run app/main.py --server.port 8501 --server.address 0.0.0.0
+
