@@ -103,14 +103,14 @@ jobs:
       - name: Scan App Docker image with Trivy
         uses: aquasecurity/trivy-action@0.20.0
         with:
-          image-ref: 'deepdiv/cold-email-app:latest:${{ github.sha }}'
+          image-ref: 'deepdiv/cold-email-app:${{ github.sha }}'
           severity: 'HIGH,CRITICAL'
           ignore-unfixed: true
 
       - name: Scan Nginx Docker image with Trivy
         uses: aquasecurity/trivy-action@0.20.0
         with:
-          image-ref: 'deepdiv/cold-email-nginx:latest:${{ github.sha }}'
+          image-ref: 'deepdiv/cold-email-nginx:${{ github.sha }}'
           severity: 'HIGH,CRITICAL'
           ignore-unfixed: true
 
