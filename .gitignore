@@ -9,5 +9,7 @@ wheels/
 # Virtual environments
 .venv
 
+.env
+
 # tests
 \rough.ipynb
