@@ -13,8 +13,8 @@ services:
       PYTHONPATH: /Cold-Email-Automation
 
   nginx:
-    image: nginx:latest
-    container_name: deepdiv/cold-email-nginx
+    image: deepdiv/cold-email-nginx:latest 
+    container_name: cold-email-nginx-container
     ports:
       - "80:80"                       # external HTTP port
     volumes:
