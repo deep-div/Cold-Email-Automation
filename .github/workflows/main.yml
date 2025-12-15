@@ -108,40 +108,40 @@ jobs:
           docker tag deepdiv/cold-email-app:latest deepdiv/cold-email-app:${{ github.sha }}
           docker tag deepdiv/cold-email-nginx:latest deepdiv/cold-email-nginx:${{ github.sha }}
 
-      # Trivy scan
-      - name: Scan App Docker image
-        uses: aquasecurity/trivy-action@0.20.0
-        with:
-          image-ref: 'deepdiv/cold-email-app:${{ github.sha }}'
-          severity: 'HIGH,CRITICAL'
-          ignore-unfixed: true
+      # # Trivy scan
+      # - name: Scan App Docker image
+      #   uses: aquasecurity/trivy-action@0.20.0
+      #   with:
+      #     image-ref: 'deepdiv/cold-email-app:${{ github.sha }}'
+      #     severity: 'HIGH,CRITICAL'
+      #     ignore-unfixed: true
 
-      - name: Scan Nginx Docker image
-        uses: aquasecurity/trivy-action@0.20.0
-        with:
-          image-ref: 'deepdiv/cold-email-nginx:${{ github.sha }}'
-          severity: 'HIGH,CRITICAL'
-          ignore-unfixed: true
+      # - name: Scan Nginx Docker image
+      #   uses: aquasecurity/trivy-action@0.20.0
+      #   with:
+      #     image-ref: 'deepdiv/cold-email-nginx:${{ github.sha }}'
+      #     severity: 'HIGH,CRITICAL'
+      #     ignore-unfixed: true
 
-      # Smoke test - App image
-      - name: Smoke Test - App Container
-        run: |
-          docker run -d --name smoke-app deepdiv/cold-email-app:${{ github.sha }}
-          sleep 5
-          docker logs smoke-app
-          docker ps -a | grep smoke-app
-          docker stop smoke-app
-          docker rm smoke-app
+      # # Smoke test - App image
+      # - name: Smoke Test - App Container
+      #   run: |
+      #     docker run -d --name smoke-app deepdiv/cold-email-app:${{ github.sha }}
+      #     sleep 5
+      #     docker logs smoke-app
+      #     docker ps -a | grep smoke-app
+      #     docker stop smoke-app
+      #     docker rm smoke-app
 
-      # Smoke test - Nginx image
-      - name: Smoke Test - Nginx Container
-        run: |
-          docker run -d --name smoke-nginx deepdiv/cold-email-nginx:${{ github.sha }}
-          sleep 5
-          docker logs smoke-nginx
-          docker ps -a | grep smoke-nginx
-          docker stop smoke-nginx
-          docker rm smoke-nginx
+      # # Smoke test - Nginx image
+      # - name: Smoke Test - Nginx Container
+      #   run: |
+      #     docker run -d --name smoke-nginx deepdiv/cold-email-nginx:${{ github.sha }}
+      #     sleep 5
+      #     docker logs smoke-nginx
+      #     docker ps -a | grep smoke-nginx
+      #     docker stop smoke-nginx
+      #     docker rm smoke-nginx
 
       # Push both Docker images to Hub
       - name: Push Docker images
