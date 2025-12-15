@@ -178,7 +178,9 @@ jobs:
             sudo docker pull deepdiv/cold-email-nginx:${{ github.sha }}
 
             sudo docker run -d --name cold-email-app deepdiv/cold-email-app:${{ github.sha }}
-            sudo docker run -d --name nginx-container -p 80:80 -p 443:443 --link cold-email-app:app deepdiv/cold-email-nginx:${{ github.sha }}
-
-
-
+            sudo docker run -d --name nginx-container \
+            -p 80:80 -p 443:443 \
+            -v /etc/letsencrypt:/etc/letsencrypt:ro \
+            -v /var/www/certbot:/var/www/certbot:ro \
+            --link cold-email-app:app \
+            deepdiv/cold-email-nginx:${{ github.sha }}
