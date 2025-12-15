@@ -99,14 +99,14 @@ jobs:
       - name: Build Docker images
         run: docker compose -f docker/docker-compose.yml build
       
-      - name: List all Docker images
-        run: docker images
-
       # Tag with commit SHA
       - name: Tag Docker images with SHA
         run: |
           docker tag deepdiv/cold-email-app:latest deepdiv/cold-email-app:${{ github.sha }}
           docker tag deepdiv/cold-email-nginx:latest deepdiv/cold-email-nginx:${{ github.sha }}
+
+      - name: List all Docker images
+        run: docker images
 
       # # Trivy scan
       # - name: Scan App Docker image
@@ -170,7 +170,7 @@ jobs:
           port: 22
           script: |
             sudo docker rm -f $(sudo docker ps -aq)
-            
+
             sudo docker stop cold-email-app nginx-container || true
             sudo docker rm cold-email-app nginx-container || true
 
