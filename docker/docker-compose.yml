@@ -19,6 +19,7 @@ services:
     image: deepdiv/cold-email-nginx:latest
     container_name: nginx-container
     ports:
+      - "80:80"
       - "443:443"
     depends_on:
       - app
