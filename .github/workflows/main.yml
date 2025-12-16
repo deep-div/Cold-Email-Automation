@@ -183,7 +183,6 @@ jobs:
               -p 80:80 -p 443:443 \
               -v /etc/letsencrypt:/etc/letsencrypt:ro \
               -v /var/www/certbot:/var/www/certbot:ro \
-              --link cold-email-app:app \
               "deepdiv/cold-email-nginx:$SHA"
 
 
