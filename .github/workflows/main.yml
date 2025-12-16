@@ -178,16 +178,12 @@ jobs:
             SHA=$(echo "${{ github.sha }}" | tr -d '\n')
             echo "Deploying image: deepdiv/cold-email-nginx:$SHA"
 
-            sudo docker network create coldemail-network
-            sudo docker run -d --name cold-email-app \
-              --network coldemail-network \
-              -p 8501:8501 \
-              deepdiv/cold-email-app:$SHA
+            sudo docker run -d --name cold-email-app -p 8501:8501 deepdiv/cold-email-app:$SHA
             sudo docker run -d --name nginx-container \
-              --network coldemail-network \
-              -p 80:80 -p 443:443 \
-              -v /etc/letsencrypt:/etc/letsencrypt:ro \
-              -v /var/www/certbot:/var/www/certbot:ro \
-              "deepdiv/cold-email-nginx:$SHA"
+            -p 80:80 -p 443:443 \
+            -v /etc/letsencrypt:/etc/letsencrypt:ro \
+            -v /var/www/certbot:/var/www/certbot:ro \
+            --link cold-email-app:app \
+            "deepdiv/cold-email-nginx:$SHA"
 
 
