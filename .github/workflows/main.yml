@@ -155,7 +155,7 @@ jobs:
   deploy:
     name: Deploy to Azure VM
     runs-on: ubuntu-latest
-    needs: docker  # wait for Docker image build & push
+    # needs: docker  # wait for Docker image build & push
 
     steps:
       - name: Checkout code
@@ -173,12 +173,9 @@ jobs:
             sudo docker rm cold-email-app nginx-container || true
 
             sudo docker pull deepdiv/cold-email-app:df1f048950eae63049aaa11b6d88714b84ef5e9d		
-
             sudo docker pull deepdiv/cold-email-nginx:df1f048950eae63049aaa11b6d88714b84ef5e9d		
 
-
             sudo docker run -d --name cold-email-app -p 8501:8501 deepdiv/cold-email-app:df1f048950eae63049aaa11b6d88714b84ef5e9d		
-
             sudo docker run -d --name nginx-container \
             -p 80:80 -p 443:443 \
             -v /etc/letsencrypt:/etc/letsencrypt:ro \
