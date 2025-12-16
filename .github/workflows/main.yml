@@ -10,9 +10,9 @@ on:
     branches: [ "main" ]
 
 jobs:
-  # ========================
-  # Build & Lint & Security
-  # ========================
+  # # ========================
+  # # Build & Lint & Security
+  # # ========================
   # build:
   #   name: Build, Lint & Security
   #   runs-on: ubuntu-latest
@@ -97,7 +97,7 @@ jobs:
           
       # Build all images
       - name: Build Docker images
-        run: docker-compose.yml build
+        run: docker-compose build
       
       # Tag with commit SHA
       - name: Tag Docker images with SHA
