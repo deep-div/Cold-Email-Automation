@@ -2,25 +2,24 @@ version: "3.9"
 
 services:
   app:
-    container_name: cold-email-app-container 
+    container_name: cold-email-app
     build:
-      context: ..                     # go one folder up from docker/ → Cold-Email-Automation/
+      context: .                    # if .. means Go one folder up from docker/ → Cold-Email-Automation/
       dockerfile: docker/Dockerfile
     image: deepdiv/cold-email-app:latest
     ports:
-      - "8501:8501"                  
+      - "8501:8501"
     environment:
       PYTHONPATH: /Cold-Email-Automation
 
   nginx:
+    container_name: nginx-container
     build:
-      context: ..
+      context: .
       dockerfile: nginx/Dockerfile
     image: deepdiv/cold-email-nginx:latest
-    container_name: nginx-container
     ports:
       - "80:80"
       - "443:443"
     depends_on:
       - app
-
