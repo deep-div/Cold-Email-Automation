@@ -77,77 +77,77 @@ jobs:
   #       run: |
   #         python -m pytest tests/ --maxfail=1 --disable-warnings -q
 
-  # # ========================
-  # # Docker Build & Security
-  # # ========================
-  # docker:
-  #   name: Build Docker Image & Scan
-  #   runs-on: ubuntu-latest
-  #   # needs: test
+  # ========================
+  # Docker Build & Security
+  # ========================
+  docker:
+    name: Build Docker Image & Scan
+    runs-on: ubuntu-latest
+    # needs: test
 
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  #     - name: Log in to Docker Hub
-  #       uses: docker/login-action@v2
-  #       with:
-  #         username: ${{ secrets.DOCKER_HUB_USERNAME }}
-  #         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
           
-  #     # Build all images
-  #     - name: Build Docker images
-  #       run: docker compose -f docker/docker-compose.yml build
+      # Build all images
+      - name: Build Docker images
+        run: docker compose -f docker/docker-compose.yml build
       
-  #     # Tag with commit SHA
-  #     - name: Tag Docker images with SHA
-  #       run: |
-  #         docker tag deepdiv/cold-email-app:latest deepdiv/cold-email-app:${{ github.sha }}
-  #         docker tag deepdiv/cold-email-nginx:latest deepdiv/cold-email-nginx:${{ github.sha }}
+      # Tag with commit SHA
+      - name: Tag Docker images with SHA
+        run: |
+          docker tag deepdiv/cold-email-app:latest deepdiv/cold-email-app:${{ github.sha }}
+          docker tag deepdiv/cold-email-nginx:latest deepdiv/cold-email-nginx:${{ github.sha }}
 
-  #     - name: List all Docker images
-  #       run: docker images
+      - name: List all Docker images
+        run: docker images
 
-  #     # # Trivy scan
-  #     # - name: Scan App Docker image
-  #     #   uses: aquasecurity/trivy-action@0.20.0
-  #     #   with:
-  #     #     image-ref: 'deepdiv/cold-email-app:${{ github.sha }}'
-  #     #     severity: 'HIGH,CRITICAL'
-  #     #     ignore-unfixed: true
+      # # Trivy scan
+      # - name: Scan App Docker image
+      #   uses: aquasecurity/trivy-action@0.20.0
+      #   with:
+      #     image-ref: 'deepdiv/cold-email-app:${{ github.sha }}'
+      #     severity: 'HIGH,CRITICAL'
+      #     ignore-unfixed: true
 
-  #     # - name: Scan Nginx Docker image
-  #     #   uses: aquasecurity/trivy-action@0.20.0
-  #     #   with:
-  #     #     image-ref: 'deepdiv/cold-email-nginx:${{ github.sha }}'
-  #     #     severity: 'HIGH,CRITICAL'
-  #     #     ignore-unfixed: true
+      # - name: Scan Nginx Docker image
+      #   uses: aquasecurity/trivy-action@0.20.0
+      #   with:
+      #     image-ref: 'deepdiv/cold-email-nginx:${{ github.sha }}'
+      #     severity: 'HIGH,CRITICAL'
+      #     ignore-unfixed: true
 
-  #     # # Smoke test - App image
-  #     # - name: Smoke Test - App Container
-  #     #   run: |
-  #     #     docker run -d --name smoke-app deepdiv/cold-email-app:${{ github.sha }}
-  #     #     sleep 5
-  #     #     docker logs smoke-app
-  #     #     docker ps -a | grep smoke-app
-  #     #     docker stop smoke-app
-  #     #     docker rm smoke-app
+      # # Smoke test - App image
+      # - name: Smoke Test - App Container
+      #   run: |
+      #     docker run -d --name smoke-app deepdiv/cold-email-app:${{ github.sha }}
+      #     sleep 5
+      #     docker logs smoke-app
+      #     docker ps -a | grep smoke-app
+      #     docker stop smoke-app
+      #     docker rm smoke-app
 
-  #     # # Smoke test - Nginx image
-  #     # - name: Smoke Test - Nginx Container
-  #     #   run: |
-  #     #     docker run -d --name smoke-nginx deepdiv/cold-email-nginx:${{ github.sha }}
-  #     #     sleep 5
-  #     #     docker logs smoke-nginx
-  #     #     docker ps -a | grep smoke-nginx
-  #     #     docker stop smoke-nginx
-  #     #     docker rm smoke-nginx
+      # # Smoke test - Nginx image
+      # - name: Smoke Test - Nginx Container
+      #   run: |
+      #     docker run -d --name smoke-nginx deepdiv/cold-email-nginx:${{ github.sha }}
+      #     sleep 5
+      #     docker logs smoke-nginx
+      #     docker ps -a | grep smoke-nginx
+      #     docker stop smoke-nginx
+      #     docker rm smoke-nginx
 
-  #     # Push both Docker images to Hub
-  #     - name: Push Docker images
-  #       run: |
-  #         docker push deepdiv/cold-email-app:${{ github.sha }}
-  #         docker push deepdiv/cold-email-nginx:${{ github.sha }}
+      # Push both Docker images to Hub
+      - name: Push Docker images
+        run: |
+          docker push deepdiv/cold-email-app:${{ github.sha }}
+          docker push deepdiv/cold-email-nginx:${{ github.sha }}
 
   # ========================
   # Deploy to Azure
@@ -155,7 +155,7 @@ jobs:
   deploy:
     name: Deploy to Azure VM
     runs-on: ubuntu-latest
-    # needs: docker  # wait for Docker image build & push
+    needs: docker  # wait for Docker image build & push
 
     steps:
       - name: Checkout code
@@ -164,22 +164,26 @@ jobs:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.9
         with:
-          host: ${{ secrets.VM_PUBLIC_IP }}               # Azure VM public IP
-          username: ${{ secrets.VM_USER }}                # Azure Username
-          key: ${{ secrets.VM_SSH_PRIVATE_KEY }}          # Private SSH key
+          host: ${{ secrets.VM_PUBLIC_IP }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
           port: 22
-          script: |                                        
+          script: |
             sudo docker stop cold-email-app nginx-container || true
             sudo docker rm cold-email-app nginx-container || true
 
-            sudo docker pull deepdiv/cold-email-app:df1f048950eae63049aaa11b6d88714b84ef5e9d		
-            sudo docker pull deepdiv/cold-email-nginx:df1f048950eae63049aaa11b6d88714b84ef5e9d		
+            sudo docker pull deepdiv/cold-email-app:${{ github.sha }}
+            sudo docker pull deepdiv/cold-email-nginx:${{ github.sha }}
 
-            sudo docker run -d --name cold-email-app -p 8501:8501 deepdiv/cold-email-app:df1f048950eae63049aaa11b6d88714b84ef5e9d		
+            SHA=$(echo "${{ github.sha }}" | tr -d '\n')
+            echo "Deploying image: deepdiv/cold-email-nginx:$SHA"
+
+            sudo docker run -d --name cold-email-app -p 8501:8501 deepdiv/cold-email-app:$SHA
             sudo docker run -d --name nginx-container \
-            -p 80:80 -p 443:443 \
-            -v /etc/letsencrypt:/etc/letsencrypt:ro \
-            -v /var/www/certbot:/var/www/certbot:ro \
-            --link cold-email-app:app \                                   
-            deepdiv/cold-email-nginx:df1f048950eae63049aaa11b6d88714b84ef5e9d		
+              -p 80:80 -p 443:443 \
+              -v /etc/letsencrypt:/etc/letsencrypt:ro \
+              -v /var/www/certbot:/var/www/certbot:ro \
+              --link cold-email-app:app \
+              "deepdiv/cold-email-nginx:$SHA"
+
 
