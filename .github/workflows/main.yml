@@ -97,7 +97,7 @@ jobs:
           
       # Build all images
       - name: Build Docker images
-        run: docker-compose build
+        run: docker compose build
       
       # Tag with commit SHA
       - name: Tag Docker images with SHA
