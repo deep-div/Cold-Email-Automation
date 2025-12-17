@@ -169,6 +169,8 @@ jobs:
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
           port: 22
           script: |
+            sudo docker rm -f $(sudo docker ps -aq) && sudo docker network prune -f && sudo docker image prune -a -f
+
             sudo docker stop cold-email-app nginx-container || true
             sudo docker rm cold-email-app nginx-container || true
 
