@@ -30,11 +30,11 @@ services:
       - monitoring
 
   nginx:
-    container_name: cold-email-nginx-${ENV}       # nginx-dev or nginx-prod
+    container_name: nginx-${ENV}       # nginx-dev or nginx-prod
     build:
       context: .
-      dockerfile: docker/nginx/Dockerfile
-    image: deepdiv/cold-email-nginx:${ENV}        # image tagged by environment
+      dockerfile: nginx/Dockerfile
+    image: deepdiv/nginx:${ENV}        # image tagged by environment
     ports:
       - "80:80"
       - "443:443"
@@ -77,6 +77,6 @@ services:
 #     networks:
 #       - monitoring
 
-# networks:
-#   monitoring:
-#     driver: bridge
+networks:
+  monitoring:
+    driver: bridge
