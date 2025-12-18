@@ -7,7 +7,7 @@ from datetime import datetime
 # ----------------------------
 # Configuration
 # ----------------------------
-LOG_DIR = "app/logs"  # Change path for Windows if needed
+LOG_DIR = "backend/logs"  # Change path for Windows if needed
 os.makedirs(LOG_DIR, exist_ok=True)
 
 LOG_FILE_INFO = os.path.join(LOG_DIR, "app_info.log")

@@ -5,10 +5,10 @@ FROM nginx:stable-alpine
 RUN rm /etc/nginx/conf.d/default.conf
 
 # Copy all environment-specific NGINX configs (dev/prod) into the image as templates
-COPY docker/nginx/config /etc/nginx/templates
+COPY nginx/config /etc/nginx/templates
 
 # Copy the startup shell script that selects the correct config at runtime
-COPY docker/nginx/entrypoint.sh /entrypoint.sh
+COPY nginx/entrypoint.sh /entrypoint.sh
 
 # Make the entrypoint script executable by the container runtime
 RUN chmod +x /entrypoint.sh

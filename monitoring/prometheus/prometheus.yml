@@ -1,0 +1,22 @@
+global:
+  scrape_interval: 15s          # how often to scrape metrics
+  evaluation_interval: 15s      # how often to evaluate rules
+
+scrape_configs:
+  # ---------------------------
+  # Your App Metrics
+  # ---------------------------
+  - job_name: 'app'
+    static_configs:
+      - targets: ['app:8501']   # matches your app container name and port
+        labels:
+          env: '${ENV}'         # optional, adds environment label
+
+  # ---------------------------
+  # Node Exporter Metrics
+  # ---------------------------
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+        labels:
+          env: '${ENV}'
