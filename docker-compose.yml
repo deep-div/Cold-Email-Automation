@@ -3,8 +3,10 @@ version: "3.9"
 networks:
   app-net:
     driver: bridge
+    internal: true
   monitoring-net:
     driver: bridge
+    internal: true                # Monitoring never exposed publicly
 
 services:
   backend:
@@ -12,87 +14,84 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
-    image: deepdiv/backend:${ENV}          # image tagged by environment
-    expose:                                # Do not give Ports, it makes it publically reachable
-      - "8000"                             # ⛔ NOT exposed to host 
+    image: deepdiv/backend:${ENV}            # image tagged by environment
+    expose:                                  # Do not give Ports, it makes it publically reachable
+      - "8000"                               # ⛔ NOT exposed to host
     environment:
       ENV: ${ENV}
       PYTHONPATH: /app
     networks:
       - app-net
       - monitoring-net
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-  
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1024M
+
   frontend:
-    container_name: frontend-${ENV}          # backend-dev or -prod
+    container_name: frontend-${ENV}          # frontend-dev or frontend-prod
     build:
       context: .
       dockerfile: frontend/Dockerfile
-    image: deepdiv/frontend:${ENV}          # image tagged by environment
+    image: deepdiv/frontend:${ENV}           # image tagged by environment
     expose:
       - "8501"
     environment:
       ENV: ${ENV}
-      BACKEND_SERVICE_URL: http://backend:8000       # Internal call Service A to Service B without API gateway
+      BACKEND_SERVICE_URL: http://backend:8000   # Internal service-to-service call used in frontend code 
       PYTHONPATH: /app
     networks:
       - app-net
       - monitoring-net
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
 
   nginx:
-    container_name: nginx-${ENV}       # nginx-dev or nginx-prod
+    container_name: nginx-${ENV}              # nginx-dev or nginx-prod
     build:
       context: .
       dockerfile: nginx/Dockerfile
-    image: deepdiv/nginx:${ENV}        # image tagged by environment
+    image: deepdiv/nginx:${ENV}               # image tagged by environment
     ports:
       - "80:80"
       - "443:443"
     depends_on:
+      - backend
       - frontend
-      - backend 
-        condition: service_healthy
     environment:
       ENV: ${ENV}
-    networks:
-      - app-net
-      - monitoring-net
 
   prometheus:
     image: prom/prometheus:v2.45.0
     container_name: prometheus-${ENV}
     volumes:
-      - ./monitoring-net/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - "9090:9090"
-    environment:
-      ENV: ${ENV}
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    expose:
+      - "9090"                                # ⛔ internal only
     networks:
       - monitoring-net
 
   grafana:
-    image: grafana/grafana:10.0.0
+    image: grafana/grafana:10.4.3
     container_name: grafana-${ENV}
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"                                # ⛔ accessed via VPN / reverse proxy
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=Admin123
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
+      GF_USERS_ALLOW_SIGN_UP: "false"
     depends_on:
       - prometheus
     networks:
       - monitoring-net
 
   node-exporter:
-    image: prom/node-exporter:1.10.2
+    image: prom/node-exporter:v1.7.0
     container_name: node-exporter-${ENV}
-    ports:
-      - "9100:9100"
-    environment:
-      ENV: ${ENV}
+    expose:
+      - "9100"                                # ⛔ never exposed to host
     networks:
       - monitoring-net
-
