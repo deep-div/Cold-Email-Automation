@@ -33,9 +33,8 @@ if submit_button:
         }
         try:
             response = requests.post(
-                f"{BACKEND_SERVICE_URL}/api/generate-email",
+                f"{BACKEND_SERVICE_URL}/generate-email",
                 json=payload,
-                timeout=20
             )
             data = response.json()
 
