@@ -6,9 +6,9 @@ scrape_configs:
   # ---------------------------
   # Your App Metrics
   # ---------------------------
-  - job_name: 'app'
+  - job_name: 'backend'
     static_configs:
-      - targets: ['app:8501']   # matches your app container name and port
+      - targets: ['backend:8000']   # matches your app container name and port
         labels:
           env: '${ENV}'         # optional, adds environment label
 
