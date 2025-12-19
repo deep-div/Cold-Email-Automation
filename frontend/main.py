@@ -1,5 +1,9 @@
 import streamlit as st
 import requests
+import os
+
+# Setting URL
+BACKEND_SERVICE_URL = os.getenv("BACKEND_SERVICE_URL")
 
 st.set_page_config(page_title="📧 Cold Email Generator", page_icon="📧", layout="wide")
 
@@ -28,7 +32,11 @@ if submit_button:
             "max_emails": max_emails
         }
         try:
-            response = requests.post("http://localhost:8000/generate-email", json=payload)
+            response = requests.post(
+                f"{BACKEND_SERVICE_URL}/api/generate-email",
+                json=payload,
+                timeout=20
+            )
             data = response.json()
 
             if "error" in data:

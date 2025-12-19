@@ -1,5 +1,11 @@
 version: "3.9"
 
+networks:
+  app-net:
+    driver: bridge
+  monitoring-net:
+    driver: bridge
+
 services:
   backend:
     container_name: backend-${ENV}          # backend-dev or -prod
@@ -7,13 +13,19 @@ services:
       context: .
       dockerfile: backend/Dockerfile
     image: deepdiv/backend:${ENV}          # image tagged by environment
-    ports:
-      - "8000:8000"
+    expose:                                # Do not give Ports, it makes it publically reachable
+      - "8000"                             # ⛔ NOT exposed to host 
     environment:
       ENV: ${ENV}
       PYTHONPATH: /app
     networks:
-      - monitoring
+      - app-net
+      - monitoring-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
   
   frontend:
     container_name: frontend-${ENV}          # backend-dev or -prod
@@ -21,13 +33,15 @@ services:
       context: .
       dockerfile: frontend/Dockerfile
     image: deepdiv/frontend:${ENV}          # image tagged by environment
-    ports:
-      - "8501:8501"
+    expose:
+      - "8501"
     environment:
       ENV: ${ENV}
+      BACKEND_SERVICE_URL: http://nginx
       PYTHONPATH: /app
     networks:
-      - monitoring
+      - app-net
+      - monitoring-net
 
   nginx:
     container_name: nginx-${ENV}       # nginx-dev or nginx-prod
@@ -38,22 +52,26 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    depends_on:
+      - frontend
+      - backend
     environment:
       ENV: ${ENV}
     networks:
-      - monitoring
+      - app-net
+      - monitoring-net
 
 #   prometheus:
 #     image: prom/prometheus:latest
 #     container_name: prometheus-${ENV}
 #     volumes:
-#       - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+#       - ./monitoring-net/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 #     ports:
 #       - "9090:9090"
 #     environment:
 #       ENV: ${ENV}
 #     networks:
-#       - monitoring
+#       - monitoring-net
 
 #   grafana:
 #     image: grafana/grafana:latest
@@ -65,7 +83,7 @@ services:
 #     depends_on:
 #       - prometheus
 #     networks:
-#       - monitoring
+#       - monitoring-net
 
 #   node-exporter:
 #     image: prom/node-exporter:latest
@@ -75,8 +93,5 @@ services:
 #     environment:
 #       ENV: ${ENV}
 #     networks:
-#       - monitoring
+#       - monitoring-net
 
-networks:
-  monitoring:
-    driver: bridge

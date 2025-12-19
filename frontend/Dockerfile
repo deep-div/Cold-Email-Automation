@@ -2,10 +2,9 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
-COPY frontend/requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r ./requirements.txt
-
 COPY frontend ./frontend
+
+RUN pip install --no-cache-dir -r ./frontend/requirements.txt
 
 ENV PYTHONPATH=/app
 
