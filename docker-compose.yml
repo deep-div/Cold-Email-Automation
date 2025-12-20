@@ -8,63 +8,51 @@ networks:
 
 services:
   backend:
-    container_name: backend-${ENV}          # backend-dev or -prod
+    container_name: backend-${ENV}
     build:
       context: .
       dockerfile: backend/Dockerfile
-    image: deepdiv/backend:${ENV}            # image tagged by environment
-    expose:                                  # Do not give Ports, it makes it publically reachable
-      - "8000"                               # ⛔ NOT exposed to host
+    image: deepdiv/backend:${ENV}
+    ports:
+      - "8000:8000"
     environment:
       ENV: ${ENV}
       PYTHONPATH: /app
     networks:
       - app-net
       - monitoring-net
-    deploy:
-      resources:
-        limits:
-          cpus: "1.0"
-          memory: 1024M
 
   frontend:
-    container_name: frontend-${ENV}          # frontend-dev or frontend-prod
+    container_name: frontend-${ENV}
     build:
       context: .
       dockerfile: frontend/Dockerfile
-    image: deepdiv/frontend:${ENV}           # image tagged by environment
-    expose:
-      - "8501"
+    image: deepdiv/frontend:${ENV}
+    ports:
+      - "8501:8501"
     environment:
       ENV: ${ENV}
-      BACKEND_SERVICE_URL: http://backend:8000   # Internal service-to-service call used in frontend code 
+      BACKEND_SERVICE_URL: http://backend:8000
       PYTHONPATH: /app
     networks:
       - app-net
-      - monitoring-net
-    deploy:
-      resources:
-        limits:
-          cpus: "0.5"
-          memory: 512M
 
   nginx:
-    container_name: nginx-${ENV}              # nginx-dev or nginx-prod
+    container_name: nginx-${ENV}
     build:
       context: .
       dockerfile: nginx/Dockerfile
-    image: deepdiv/nginx:${ENV}               # image tagged by environment
+    image: deepdiv/nginx:${ENV}
     ports:
       - "80:80"
       - "443:443"
-    networks:
-      - app-net
-      - monitoring-net
     depends_on:
       - backend
       - frontend
     environment:
       ENV: ${ENV}
+    networks:
+      - app-net
 
   prometheus:
     image: prom/prometheus:latest
@@ -72,36 +60,54 @@ services:
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
-      - '--web.external-url=/prometheus/'  # This is the key fix
-      - '--web.route-prefix=/prometheus/'
-    expose:
-      - "9090"                               # ⛔ internal only
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    ports:
+      - "9090:9090"
     networks:
       - monitoring-net
 
   grafana:
     image: grafana/grafana:10.4.3
     container_name: grafana
-    expose:
-      - "3000"                                # ⛔ accessed via VPN / reverse proxy
+    ports:
+      - "3000:3000"
     environment:
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
       GF_USERS_ALLOW_SIGN_UP: "false"
-      GF_SERVER_ROOT_URL: "%(protocol)s://%(domain)s/grafana/"
-      GF_SERVER_SERVE_FROM_SUB_PATH: "true"
     depends_on:
       - prometheus
     networks:
       - monitoring-net
-      
+
   node-exporter:
     image: prom/node-exporter:v1.7.0
     container_name: node-exporter
-    expose:
-      - "9100"                                # ⛔ never exposed to host
+    ports:
+      - "9100:9100"
+    networks:
+      - monitoring-net
+  
+  loki:
+    image: grafana/loki:2.9.4
+    container_name: loki
+    volumes:
+      - ./monitoring/loki-config.yaml:/etc/loki/config.yaml:ro
+    command: -config.file=/etc/loki/config.yaml
+    ports:
+      - "3100:3100"
+    networks:
+      - monitoring-net
+
+  promtail:
+    image: grafana/promtail:2.9.4
+    container_name: promtail
+    volumes:
+      - ./monitoring/promtail-config.yaml:/etc/promtail/config.yaml:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: -config.file=/etc/promtail/config.yaml
+    ports:
+      - "9080:9080"
+    depends_on:
+      - loki
     networks:
       - monitoring-net

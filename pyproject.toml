@@ -118,6 +118,7 @@ dependencies = [
     "pillow==10.4.0",
     "platformdirs==4.5.1",
     "posthog==7.0.1",
+    "prometheus-client>=0.23.1",
     "prompt-toolkit==3.0.52",
     "propcache==0.4.1",
     "protobuf==4.25.8",
