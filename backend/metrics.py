@@ -5,41 +5,59 @@ import time
 
 REQUEST_COUNT = Counter(
     "http_requests_total",
-    "Total number of HTTP requests",
-    ["method", "path", "status"]
+    "Total HTTP requests",
+    ["method", "route", "status"]
 )
 
 REQUEST_LATENCY = Histogram(
     "http_request_duration_seconds",
     "HTTP request latency",
-    ["method", "path"],
+    ["method", "route"],
     buckets=(0.05, 0.1, 0.2, 0.3, 0.5, 0.75, 1, 1.5, 2, 3, 5)
 )
 
 IN_PROGRESS_REQUESTS = Gauge(
     "http_requests_in_progress",
-    "Number of HTTP requests in progress"
+    "In-flight HTTP requests"
 )
 
-def setup_metrics(app):
+SERVER_ERRORS = Counter(
+    "http_requests_5xx_total",
+    "Total HTTP 5xx responses",
+    ["method", "route"]
+)
 
+
+def setup_metrics(app):
     @app.middleware("http")
     async def prometheus_middleware(request: Request, call_next):
-        path = request.url.path
+        if request.url.path == "/metrics":
+            return await call_next(request)
+
         method = request.method
+
+        route = request.scope.get("route")
+        route_path = route.path if route else "unknown"
 
         IN_PROGRESS_REQUESTS.inc()
         start_time = time.time()
+        status = "500"
 
         try:
             response = await call_next(request)
-            status = response.status_code
+            status = str(response.status_code)
             return response
+        except Exception:
+            SERVER_ERRORS.labels(method, route_path).inc()
+            raise
         finally:
             duration = time.time() - start_time
-            REQUEST_COUNT.labels(method, path, status).inc()
-            REQUEST_LATENCY.labels(method, path).observe(duration)
+            REQUEST_COUNT.labels(method, route_path, status).inc()
+            REQUEST_LATENCY.labels(method, route_path).observe(duration)
             IN_PROGRESS_REQUESTS.dec()
+
+            if status.startswith("5"):
+                SERVER_ERRORS.labels(method, route_path).inc()
 
     @app.get("/metrics")
     async def metrics():

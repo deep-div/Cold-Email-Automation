@@ -10,23 +10,21 @@ import traceback
 
 load_dotenv()
 
-corr_id = str(uuid.uuid4())
-
 class Chain:
     def __init__(self):
         groq_key = os.getenv("GROQ_API_KEY")
-        logger.debug(f"GROQ_API_KEY Loaded: {bool(groq_key)}", extra={"correlation_id": corr_id})
+        logger.debug(f"GROQ_API_KEY Loaded: {bool(groq_key)}")
 
         self.llm = ChatGroq(
             temperature=1,
             groq_api_key=groq_key,
             model_name="llama-3.3-70b-versatile"
         )
-        logger.info("ChatGroq LLM initialized successfully.", extra={"correlation_id": corr_id})
+        logger.info("ChatGroq LLM initialized successfully.")
 
     def extract_jobs(self, cleaned_text):
-        logger.info(f"Received cleaned_text length: {len(cleaned_text)}", extra={"correlation_id": corr_id})
-        logger.debug(f"Cleaned_text content: {cleaned_text[:5000]}", extra={"correlation_id": corr_id})  # Logs first 5000 chars
+        logger.info(f"Received cleaned_text length: {len(cleaned_text)}")
+        logger.debug(f"Cleaned_text content: {cleaned_text[:5000]}")  # Logs first 5000 chars
 
         prompt_extract = PromptTemplate.from_template(
             """
@@ -43,27 +41,27 @@ class Chain:
         chain_extract = prompt_extract | self.llm
 
         try:
-            logger.info("Invoking LLM for job extraction...", extra={"correlation_id": corr_id})
+            logger.info("Invoking LLM for job extraction...")
             res = chain_extract.invoke({"page_data": cleaned_text})
-            logger.debug(f"Raw LLM Response: {res}", extra={"correlation_id": corr_id})
+            logger.debug(f"Raw LLM Response: {res}")
 
             response_content = res.content
-            logger.info("Parsing JSON response...", extra={"correlation_id": corr_id})
+            logger.info("Parsing JSON response...")
 
             json_parser = JsonOutputParser()
             parsed = json_parser.parse(response_content)
 
-            logger.debug(f"Parsed JSON: {parsed}", extra={"correlation_id": corr_id})
+            logger.debug(f"Parsed JSON: {parsed}")
             return parsed if isinstance(parsed, list) else [parsed]
 
         except Exception as e:
-            logger.error(f"Failed job extraction: {str(e)}", extra={"correlation_id": corr_id})
-            raise OutputParserException("Context too big. Unable to parse jobs.", extra={"correlation_id": corr_id})
+            logger.error(f"Failed job extraction: {str(e)}")
+            raise OutputParserException("Context too big. Unable to parse jobs.")
 
     def write_mail(self, job, links):
-        logger.info("Constructing cold email...", extra={"correlation_id": corr_id})
-        logger.debug(f"Job Provided: {job}", extra={"correlation_id": corr_id})
-        logger.debug(f"Portfolio Links Provided: {links}", extra={"correlation_id": corr_id})
+        logger.info("Constructing cold email...")
+        logger.debug(f"Job Provided: {job}")
+        logger.debug(f"Portfolio Links Provided: {links}")
 
         prompt_email = PromptTemplate.from_template(
             """
@@ -92,10 +90,10 @@ class Chain:
                 "link_list": links
             })
 
-            logger.info("Email successfully generated.", extra={"correlation_id": corr_id})
-            logger.debug(f"Generated Email Content: {res.content}", extra={"correlation_id": corr_id})
+            logger.info("Email successfully generated.")
+            logger.debug(f"Generated Email Content: {res.content}")
             return res.content
 
         except Exception as e:
-            logger.error(f"Failed generating cold email: {str(e)}", extra={"correlation_id": corr_id})
+            logger.error(f"Failed generating cold email: {str(e)}")
             raise RuntimeError("LLM failed to generate cold email.")

@@ -10,7 +10,6 @@ class JsonFormatter(logging.Formatter):
             "service": "backend",
             "logger": record.name,
             "message": record.getMessage(),
-            "correlation_id": getattr(record, "correlation_id", None)
         }
         return json.dumps(log_record)
 
