@@ -160,11 +160,14 @@ jobs:
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
           port: 22
           script: |
+            set -e
 
-            # Pull all other images defined in prod compose
+            cd ~/app
+
+          # Pull all other images defined in prod compose
             sudo docker-compose -f ./docker-compose-prod.yml pull
 
-            # Start the stack
+          # Start the stack
             sudo docker-compose -f ./docker-compose-prod.yml up -d
 
 
