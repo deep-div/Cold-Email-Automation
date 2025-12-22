@@ -144,15 +144,24 @@ jobs:
   # Deploy to Azure
   # ========================
   deploy:
-    name: Deploy to Azure VM
+    name: Deploy Monitoring & Compose to Azure VM
     runs-on: ubuntu-latest
-    # needs: docker
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Deploy via SSH
+      - name: Copy monitoring folder and docker-compose-prod.yml to VM
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VM_PUBLIC_IP }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+          port: 22
+          source: "monitoring/,docker-compose-prod.yml"   # only what VM needs
+          target: "/home/azureuser"
+
+      - name: Deploy Docker Compose on VM
         uses: appleboy/ssh-action@v0.1.9
         with:
           host: ${{ secrets.VM_PUBLIC_IP }}
@@ -160,9 +169,10 @@ jobs:
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            sudo docker-compose -f docker-compose-prod.yml pull
+            cd /home/azureuser
 
-            sudo docker-compose -f docker-compose-prod.yml up -d
+            docker compose -f docker-compose-prod.yml pull
+            docker compose -f docker-compose-prod.yml up -d --remove-orphans
 
 
 
