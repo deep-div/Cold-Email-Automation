@@ -5,18 +5,15 @@ server:
   log_level: info
 
 common:
-  path_prefix: /var/lib/loki
-
+  path_prefix: /loki
   storage:
     filesystem:
-      chunks_directory: /var/lib/loki/chunks
-      rules_directory: /var/lib/loki/rules
-
+      chunks_directory: /loki/chunks
+      rules_directory: /loki/rules
   replication_factor: 1
-
   ring:
     kvstore:
-      store: inmemory   # OK because single-instance
+      store: inmemory   
 
 schema_config:
   configs:
