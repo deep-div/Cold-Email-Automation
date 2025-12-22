@@ -171,8 +171,8 @@ jobs:
           script: |
             cd /home/azureuser
 
-            docker compose docker-compose-prod.yml pull
-            docker compose docker-compose-prod.yml up 
+            sudo docker compose docker-compose-prod.yml pull
+            sudo docker compose docker-compose-prod.yml up 
 
 
 
