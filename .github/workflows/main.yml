@@ -102,39 +102,38 @@ jobs:
       - name: List all Docker images
         run: docker images
 
-      # # Install Trivy
-      # - name: Install Trivy
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install -y wget
-      #     wget https://github.com/aquasecurity/trivy/releases/download/v0.49.1/trivy_0.49.1_Linux-64bit.deb
-      #     sudo dpkg -i trivy_0.49.1_Linux-64bit.deb
+      # Install Trivy
+      - name: Install Trivy
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget
+          wget https://github.com/aquasecurity/trivy/releases/download/v0.49.1/trivy_0.49.1_Linux-64bit.deb
+          sudo dpkg -i trivy_0.49.1_Linux-64bit.deb
 
-      # # Scan all images exactly as defined in compose
-      # - name: Scan all Docker images
-      #   run: |
-      #     images=$(docker compose config | grep 'image:' | awk '{print $2}')
-      #     for image in $images; do
-      #       trivy image --severity HIGH,CRITICAL --ignore-unfixed $image
-      #     done
+      # Scan all images exactly as defined in compose
+      - name: Scan all Docker images
+        run: |
+          images=$(docker compose config | grep 'image:' | awk '{print $2}')
+          for image in $images; do
+            trivy image --severity HIGH,CRITICAL --ignore-unfixed $image
+          done
 
-      # # Smoke test using compose
-      # - name: Smoke test using docker compose
-      #   run: |
-      #     docker compose up -d
-      #     sleep 10
-      #     docker compose ps
-      #     docker compose logs
-      #     docker compose down
+      # Smoke test using compose
+      - name: Smoke test using docker compose
+        run: |
+          docker compose up -d
+          sleep 10
+          docker compose ps
+          docker compose logs
+          docker compose down
 
       # Push my docker images, as prebuilt images can't be pushed
       - name: Push all Docker images 
         run: |
           images=$(docker compose config | grep 'image:' | awk '{print $2}')
-
           for image in $images; do
-            # Only push images under your namespace
-            if [[ "$image" == "***"/* ]]; then
+            if [[ "$image" == "deepdiv"/* ]]; then
+              echo "Pushing $image"
               docker push $image
             else
               echo "Skipping third-party image $image"
