@@ -30,3 +30,5 @@ scrape_configs:
           stages:
             - drop:
                 expression: 'GET /metrics'
+
+                
