@@ -162,10 +162,10 @@ jobs:
           script: |
 
             # Pull all other images defined in prod compose
-            sudo docker-compose -f docker-compose-prod.yml pull
+            sudo docker-compose -f ./docker-compose-prod.yml pull
 
             # Start the stack
-            sudo docker-compose -f docker-compose-prod.yml up -d
+            sudo docker-compose -f ./docker-compose-prod.yml up -d
 
 
 
