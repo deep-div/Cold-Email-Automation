@@ -146,7 +146,7 @@ jobs:
   deploy:
     name: Deploy to Azure VM
     runs-on: ubuntu-latest
-    needs: docker
+    # needs: docker
 
     steps:
       - name: Checkout code
