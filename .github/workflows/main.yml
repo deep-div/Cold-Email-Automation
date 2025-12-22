@@ -172,9 +172,9 @@ jobs:
           script: |
             cd /home/azureuser
 
-            sudo docker-compose -f docker-compose-prod.yml down --rmi all --remove-orphans
+            sudo docker-compose -f docker-compose-prod.yml down --rmi all 
             sudo docker-compose -f docker-compose-prod.yml pull
-            sudo docker-compose -f docker-compose-prod.yml up -d --remove-orphans 
+            sudo docker-compose -f docker-compose-prod.yml up -d 
 
 
 
