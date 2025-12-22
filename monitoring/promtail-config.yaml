@@ -24,12 +24,9 @@ scrape_configs:
       - source_labels: ['__meta_docker_container_label_com_docker_compose_service']
         target_label: service
 
-      - source_labels: ['__meta_docker_container_label_com_docker_compose_project']
-        target_label: project
-
     pipeline_stages:
       - match:
-          selector: '{container=~".*"}'   # apply to all containers
+          selector: '{container=~".*"}'   
           stages:
             - drop:
                 expression: 'GET /metrics'

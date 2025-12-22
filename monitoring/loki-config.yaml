@@ -2,17 +2,21 @@ auth_enabled: false
 
 server:
   http_listen_port: 3100
+  log_level: info
 
 common:
-  path_prefix: /loki
+  path_prefix: /var/lib/loki
+
   storage:
     filesystem:
-      chunks_directory: /loki/chunks
-      rules_directory: /loki/rules
+      chunks_directory: /var/lib/loki/chunks
+      rules_directory: /var/lib/loki/rules
+
   replication_factor: 1
+
   ring:
     kvstore:
-      store: inmemory
+      store: inmemory   # OK because single-instance
 
 schema_config:
   configs:
@@ -25,4 +29,15 @@ schema_config:
         period: 24h
 
 limits_config:
+  retention_period: 168h
+  ingestion_rate_mb: 10
+  ingestion_burst_size_mb: 20
+  max_query_parallelism: 32
+  max_entries_limit_per_query: 5000
+
+chunk_store_config:
+  max_look_back_period: 168h
+
+table_manager:
+  retention_deletes_enabled: true
   retention_period: 168h

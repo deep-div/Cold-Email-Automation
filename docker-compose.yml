@@ -8,49 +8,45 @@ networks:
 
 services:
   backend:
-    container_name: backend-${ENV}
+    container_name: backend
     build:
       context: .
       dockerfile: backend/Dockerfile
-    image: deepdiv/backend:${ENV}
+    image: deepdiv/backend
     expose:
       - "8000"
     environment:
-      ENV: ${ENV}
       PYTHONPATH: /app
     networks:
       - app-net
       - monitoring-net
 
   frontend:
-    container_name: frontend-${ENV}
+    container_name: frontend
     build:
       context: .
       dockerfile: frontend/Dockerfile
-    image: deepdiv/frontend:${ENV}
+    image: deepdiv/frontend
     expose:
       - "8501"
     environment:
-      ENV: ${ENV}
       BACKEND_SERVICE_URL: http://backend:8000
       PYTHONPATH: /app
     networks:
       - app-net
 
   nginx:
-    container_name: nginx-${ENV}
+    container_name: nginx
     build:
       context: .
       dockerfile: nginx/Dockerfile
-    image: deepdiv/nginx:${ENV}
+    image: deepdiv/nginx
     ports:
       - "80:80"
       - "443:443"
     depends_on:
       - backend
       - frontend
-    environment:
-      ENV: ${ENV}
     networks:
       - app-net
 
