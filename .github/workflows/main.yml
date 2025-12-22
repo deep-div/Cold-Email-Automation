@@ -160,13 +160,9 @@ jobs:
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            set -e
+            sudo docker-compose -f docker-compose-prod.yml pull
 
-            cd ~/app
-
-            sudo docker-compose -f ./docker-compose-prod.yml pull
-
-            sudo docker-compose -f ./docker-compose-prod.yml up -d
+            sudo docker-compose -f docker-compose-prod.yml up -d
 
 
 
