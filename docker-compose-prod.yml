@@ -9,9 +9,6 @@ networks:
 services:
   backend:
     container_name: backend
-    build:
-      context: .
-      dockerfile: backend/Dockerfile
     image: deepdiv/backend:v1.0
     expose:
       - "8000"
@@ -23,9 +20,6 @@ services:
 
   frontend:
     container_name: frontend
-    build:
-      context: .
-      dockerfile: frontend/Dockerfile
     image: deepdiv/frontend:v1.0
     expose:
       - "8501"
@@ -37,18 +31,15 @@ services:
 
   nginx:
     container_name: nginx
-    build:
-      context: .
-      dockerfile: nginx/Dockerfile
     image: deepdiv/nginx:v1.0
-    env_file:
-      - .env
     ports:
       - "80:80"
       - "443:443"
     depends_on:
       - backend
       - frontend
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     networks:
       - app-net
 
@@ -107,18 +98,5 @@ services:
       - "9080"
     depends_on:
       - loki
-    networks:
-      - monitoring-net
-  
-  cadvisor:
-    image: google/cadvisor:latest
-    container_name: cadvisor
-    expose:
-      - "8080:8080"
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:rw
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
     networks:
       - monitoring-net

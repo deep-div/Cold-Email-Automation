@@ -12,6 +12,7 @@ COPY nginx/entrypoint.sh /entrypoint.sh
 
 # Make the entrypoint script executable by the container runtime
 RUN chmod +x /entrypoint.sh
+RUN sed -i 's/\r$//' /entrypoint.sh 
 
 # Declare HTTP and HTTPS ports used by NGINX
 EXPOSE 80 443
