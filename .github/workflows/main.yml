@@ -127,12 +127,14 @@ jobs:
           docker compose logs
           docker compose down
 
-      # Push images exactly as tagged
-      - name: Push all Docker images
+      # Push my docker images, as prebuilt images can't be pushed
+      - name: Push all Docker images 
         run: |
           images=$(docker compose config | grep 'image:' | awk '{print $2}')
           for image in $images; do
-            docker push $image
+            if [[ "$image" == ***/* ]]; then
+              docker push $image
+            fi
           done
 
   # # ========================
