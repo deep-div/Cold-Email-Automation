@@ -109,7 +109,14 @@ jobs:
       - name: List all Docker images
         run: docker images
 
-      # Trivy scan
+      # Trivy Install and scan
+      - name: Install Trivy
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget
+          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.49.1_Linux-64bit.deb
+          sudo dpkg -i trivy_0.49.1_Linux-64bit.deb
+
       - name: Scan all Docker images
         run: |
           images=$(docker compose config | grep 'image:' | awk '{print $2}')
@@ -118,7 +125,7 @@ jobs:
           done
 
       # Smoke test - App image
-     - name: Smoke test using docker compose
+      - name: Smoke test using docker compose
         run: |
           docker compose up -d
           sleep 10
