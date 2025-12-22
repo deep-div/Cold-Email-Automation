@@ -79,61 +79,61 @@ jobs:
   # ========================
   # Docker Build & Security
   # ========================
-docker:
-  name: Build Docker Image & Scan
-  runs-on: ubuntu-latest
-  # needs: test
+  docker:
+    name: Build Docker Image & Scan
+    runs-on: ubuntu-latest
+    # needs: test
 
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
-    # Build all images (tags already defined in compose)
-    - name: Build Docker images
-      run: docker compose build
+      # Build all images (tags already defined in compose)
+      - name: Build Docker images
+        run: docker compose build
 
-    # List all images
-    - name: List all Docker images
-      run: docker images
+      # List all images
+      - name: List all Docker images
+        run: docker images
 
-    # Install Trivy
-    - name: Install Trivy
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y wget
-        wget https://github.com/aquasecurity/trivy/releases/download/v0.49.1/trivy_0.49.1_Linux-64bit.deb
-        sudo dpkg -i trivy_0.49.1_Linux-64bit.deb
+      # Install Trivy
+      - name: Install Trivy
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget
+          wget https://github.com/aquasecurity/trivy/releases/download/v0.49.1/trivy_0.49.1_Linux-64bit.deb
+          sudo dpkg -i trivy_0.49.1_Linux-64bit.deb
 
-    # Scan all images exactly as defined in compose
-    - name: Scan all Docker images
-      run: |
-        images=$(docker compose config | grep 'image:' | awk '{print $2}')
-        for image in $images; do
-          trivy image --severity HIGH,CRITICAL --ignore-unfixed $image
-        done
+      # Scan all images exactly as defined in compose
+      - name: Scan all Docker images
+        run: |
+          images=$(docker compose config | grep 'image:' | awk '{print $2}')
+          for image in $images; do
+            trivy image --severity HIGH,CRITICAL --ignore-unfixed $image
+          done
 
-    # Smoke test using compose
-    - name: Smoke test using docker compose
-      run: |
-        docker compose up -d
-        sleep 10
-        docker compose ps
-        docker compose logs
-        docker compose down
+      # Smoke test using compose
+      - name: Smoke test using docker compose
+        run: |
+          docker compose up -d
+          sleep 10
+          docker compose ps
+          docker compose logs
+          docker compose down
 
-    # Push images exactly as tagged
-    - name: Push all Docker images
-      run: |
-        images=$(docker compose config | grep 'image:' | awk '{print $2}')
-        for image in $images; do
-          docker push $image
-        done
+      # Push images exactly as tagged
+      - name: Push all Docker images
+        run: |
+          images=$(docker compose config | grep 'image:' | awk '{print $2}')
+          for image in $images; do
+            docker push $image
+          done
 
   # # ========================
   # # Deploy to Azure
