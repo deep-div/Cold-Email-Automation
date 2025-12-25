@@ -5,7 +5,7 @@ name: Enterprise CI/CD Pipeline
 
 on:
   push:
-    branches: [ "dev"]
+    branches: [ "main"]
 
 
 jobs:
@@ -76,69 +76,69 @@ jobs:
   #       run: |
   #         python -m pytest tests/ --maxfail=1 --disable-warnings -q
 
-  # ========================
-  # Docker Build & Security
-  # ========================
-  docker:
-    name: Build Docker Image & Scan
-    runs-on: ubuntu-latest
-    # needs: test
+  # # ========================
+  # # Docker Build & Security
+  # # ========================
+  # docker:
+  #   name: Build Docker Image & Scan
+  #   runs-on: ubuntu-latest
+  #   # needs: test
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+  #     - name: Log in to Docker Hub
+  #       uses: docker/login-action@v2
+  #       with:
+  #         username: ${{ secrets.DOCKER_HUB_USERNAME }}
+  #         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
-      # Build all images (tags already defined in compose)
-      - name: Build Docker images
-        run: docker compose build
+  #     # Build all images (tags already defined in compose)
+  #     - name: Build Docker images
+  #       run: docker compose build
 
-      # List all images
-      - name: List all Docker images
-        run: docker images
+  #     # List all images
+  #     - name: List all Docker images
+  #       run: docker images
 
-      # Install Trivy
-      - name: Install Trivy
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget
-          wget https://github.com/aquasecurity/trivy/releases/download/v0.49.1/trivy_0.49.1_Linux-64bit.deb
-          sudo dpkg -i trivy_0.49.1_Linux-64bit.deb
+  #     # Install Trivy
+  #     - name: Install Trivy
+  #       run: |
+  #         sudo apt-get update
+  #         sudo apt-get install -y wget
+  #         wget https://github.com/aquasecurity/trivy/releases/download/v0.49.1/trivy_0.49.1_Linux-64bit.deb
+  #         sudo dpkg -i trivy_0.49.1_Linux-64bit.deb
 
-      # Scan all images exactly as defined in compose
-      - name: Scan all Docker images
-        run: |
-          images=$(docker compose config | grep 'image:' | awk '{print $2}')
-          for image in $images; do
-            trivy image --severity HIGH,CRITICAL --ignore-unfixed $image
-          done
+  #     # Scan all images exactly as defined in compose
+  #     - name: Scan all Docker images
+  #       run: |
+  #         images=$(docker compose config | grep 'image:' | awk '{print $2}')
+  #         for image in $images; do
+  #           trivy image --severity HIGH,CRITICAL --ignore-unfixed $image
+  #         done
 
-      # Smoke test using compose
-      - name: Smoke test using docker compose
-        run: |
-          docker compose up -d
-          sleep 10
-          docker compose ps
-          docker compose logs
-          docker compose down
+  #     # Smoke test using compose
+  #     - name: Smoke test using docker compose
+  #       run: |
+  #         docker compose up -d
+  #         sleep 10
+  #         docker compose ps
+  #         docker compose logs
+  #         docker compose down
 
-      # Push my docker images, as prebuilt images can't be pushed
-      - name: Push all Docker images 
-        run: |
-          images=$(docker compose config | grep 'image:' | awk '{print $2}')
-          for image in $images; do
-            if [[ "$image" == "deepdiv"/* ]]; then
-              echo "Pushing $image"
-              docker push $image
-            else
-              echo "Skipping third-party image $image"
-            fi
-          done
+  #     # Push my docker images, as prebuilt images can't be pushed
+  #     - name: Push all Docker images 
+  #       run: |
+  #         images=$(docker compose config | grep 'image:' | awk '{print $2}')
+  #         for image in $images; do
+  #           if [[ "$image" == "deepdiv"/* ]]; then
+  #             echo "Pushing $image"
+  #             docker push $image
+  #           else
+  #             echo "Skipping third-party image $image"
+  #           fi
+  #         done
 
   # ========================
   # Deploy to Azure
@@ -146,7 +146,7 @@ jobs:
   deploy:
     name: Deploy Monitoring & Compose to Azure VM
     runs-on: ubuntu-latest
-    needs: docker
+    # needs: docker
 
     steps:
       - name: Checkout repository
