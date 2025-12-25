@@ -99,12 +99,12 @@ services:
       - "443:443"
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt:ro
-    depends_on:
-      - backend
-      - frontend
-      - prometheus
-      - grafana
-      - loki
+    # depends_on:
+      # - backend
+      # - frontend
+      # - prometheus
+      # - grafana
+      # - loki
     networks:
       - app-net
       - monitoring-net
