@@ -36,7 +36,7 @@ services:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
-      - "--web.external-url=http://coldemailgenrator.online/monitoring/prometheus/"
+      - "--web.external-url=https://coldemailgenrator.online/monitoring/prometheus/"
       - "--web.route-prefix=/monitoring/prometheus"
     expose:
       - "9090"
