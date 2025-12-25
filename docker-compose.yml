@@ -13,8 +13,8 @@ services:
       context: .
       dockerfile: backend/Dockerfile
     image: deepdiv/backend:v1.0
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     environment:
       PYTHONPATH: /app
     networks:
@@ -27,8 +27,8 @@ services:
       context: .
       dockerfile: frontend/Dockerfile
     image: deepdiv/frontend:v1.0
-    ports:
-      - "8501:8501"
+    expose:
+      - "8501"
     environment:
       BACKEND_SERVICE_URL: http://backend:8000
       PYTHONPATH: /app
@@ -44,16 +44,16 @@ services:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--web.external-url=http://localhost/monitoring/prometheus/"
       - "--web.route-prefix=/monitoring/prometheus"
-    ports:
-      - "9090:9090"
+    expose:
+      - "9090"
     networks:
       - monitoring-net
 
   grafana:
     image: grafana/grafana:10.4.3
     container_name: grafana
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     environment:
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
       GF_USERS_ALLOW_SIGN_UP: "false"
@@ -67,8 +67,8 @@ services:
   node-exporter:
     image: prom/node-exporter:v1.7.0
     container_name: node-exporter
-    ports:
-      - "9100:9100"
+    expose:
+      - "9100"
     networks:
       - monitoring-net
 
@@ -78,8 +78,8 @@ services:
     volumes:
       - ./monitoring/loki-config.yaml:/etc/loki/config.yaml:ro
     command: -config.file=/etc/loki/config.yaml
-    ports:
-      - "3100:3100"
+    expose:
+      - "3100"
     networks:
       - monitoring-net
 
@@ -90,8 +90,8 @@ services:
       - ./monitoring/promtail-config.yaml:/etc/promtail/config.yaml:ro
       - /var/run/docker.sock:/var/run/docker.sock
     command: -config.file=/etc/promtail/config.yaml
-    ports:
-      - "9080:9080"
+    expose:
+      - "9080"
     depends_on:
       - loki
     networks:
