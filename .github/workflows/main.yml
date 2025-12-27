@@ -5,7 +5,7 @@ name: Enterprise CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main"]
+    branches: ["main"]
 
 
 jobs:
@@ -159,7 +159,7 @@ jobs:
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
           port: 22
-          source: "monitoring/,docker-compose-prod.yml,.env"   # only what VM needs
+          source: "monitoring/,docker-compose-prod.yml"   # only what VM needs
           target: "/home/azureuser"
 
       - name: Deploy Docker Compose on VM

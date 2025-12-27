@@ -7,33 +7,95 @@ networks:
     driver: bridge
 
 services:
-  backend:
-    container_name: backend
-    build:
-      context: .
-      dockerfile: backend/Dockerfile
-    image: deepdiv/backend:v1.0
-    expose:
-      - "8000"
-    environment:
-      PYTHONPATH: /app
-    networks:
-      - app-net
-      - monitoring-net
+  # backend:
+  #   container_name: backend
+  #   build:
+  #     context: .
+  #     dockerfile: backend/Dockerfile
+  #   image: deepdiv/backend:v1.0
+  #   expose:
+  #     - "8000"
+  #   environment:
+  #     PYTHONPATH: /app
+  #   networks:
+  #     - app-net
+  #     - monitoring-net
 
-  frontend:
-    container_name: frontend
-    build:
-      context: .
-      dockerfile: frontend/Dockerfile
-    image: deepdiv/frontend:v1.0
-    expose:
-      - "8501"
-    environment:
-      BACKEND_SERVICE_URL: http://backend:8000
-      PYTHONPATH: /app
-    networks:
-      - app-net
+  # frontend:
+  #   container_name: frontend
+  #   build:
+  #     context: .
+  #     dockerfile: frontend/Dockerfile
+  #   image: deepdiv/frontend:v1.0
+  #   expose:
+  #     - "8501"
+  #   environment:
+  #     BACKEND_SERVICE_URL: http://backend:8000
+  #     PYTHONPATH: /app
+  #   networks:
+  #     - app-net
+
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: prometheus
+  #   volumes:
+  #     - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+  #   command:
+  #     - "--config.file=/etc/prometheus/prometheus.yml"
+  #     - "--web.external-url=http://localhost/monitoring/prometheus/"
+  #     - "--web.route-prefix=/monitoring/prometheus"
+  #   expose:
+  #     - "9090"
+  #   networks:
+  #     - monitoring-net
+
+  # grafana:
+  #   image: grafana/grafana:10.4.3
+  #   container_name: grafana
+  #   expose:
+  #     - "3000"
+  #   environment:
+  #     GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
+  #     GF_USERS_ALLOW_SIGN_UP: "false"
+  #     GF_SERVER_ROOT_URL: "%(protocol)s://%(domain)s/monitoring/grafana/"
+  #     GF_SERVER_SERVE_FROM_SUB_PATH: "true"
+  #   depends_on:
+  #     - prometheus
+  #   networks:
+  #     - monitoring-net
+
+  # node-exporter:
+  #   image: prom/node-exporter:v1.7.0
+  #   container_name: node-exporter
+  #   expose:
+  #     - "9100"
+  #   networks:
+  #     - monitoring-net
+
+  # loki:
+  #   image: grafana/loki:2.9.4
+  #   container_name: loki
+  #   volumes:
+  #     - ./monitoring/loki-config.yaml:/etc/loki/config.yaml:ro
+  #   command: -config.file=/etc/loki/config.yaml
+  #   expose:
+  #     - "3100"
+  #   networks:
+  #     - monitoring-net
+
+  # promtail:
+  #   image: grafana/promtail:2.9.4
+  #   container_name: promtail
+  #   volumes:
+  #     - ./monitoring/promtail-config.yaml:/etc/promtail/config.yaml:ro
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   command: -config.file=/etc/promtail/config.yaml
+  #   expose:
+  #     - "9080"
+  #   depends_on:
+  #     - loki
+  #   networks:
+  #     - monitoring-net
 
   nginx:
     container_name: nginx
@@ -46,79 +108,12 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    depends_on:
-      - backend
-      - frontend
+    # depends_on:
+    #   - backend
+    #   - frontend
+    #   - prometheus
+    #   - grafana
+    #   - loki
     networks:
       - app-net
-
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    volumes:
-      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-    command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
-    expose:
-      - "9090"
-    networks:
-      - monitoring-net
-
-  grafana:
-    image: grafana/grafana:10.4.3
-    container_name: grafana
-    expose:
-      - "3000"
-    environment:
-      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
-      GF_USERS_ALLOW_SIGN_UP: "false"
-    depends_on:
-      - prometheus
-    networks:
-      - monitoring-net
-
-  node-exporter:
-    image: prom/node-exporter:v1.7.0
-    container_name: node-exporter
-    expose:
-      - "9100"
-    networks:
-      - monitoring-net
-  
-  loki:
-    image: grafana/loki:2.9.4
-    container_name: loki
-    volumes:
-      - ./monitoring/loki-config.yaml:/etc/loki/config.yaml:ro
-    command: -config.file=/etc/loki/config.yaml
-    expose:
-      - "3100"
-    networks:
-      - monitoring-net
-
-  promtail:
-    image: grafana/promtail:2.9.4
-    container_name: promtail
-    volumes:
-      - ./monitoring/promtail-config.yaml:/etc/promtail/config.yaml:ro
-      - /var/run/docker.sock:/var/run/docker.sock
-    command: -config.file=/etc/promtail/config.yaml
-    expose:
-      - "9080"
-    depends_on:
-      - loki
-    networks:
-      - monitoring-net
-  
-  cadvisor:
-    image: google/cadvisor:latest
-    container_name: cadvisor
-    expose:
-      - "8080:8080"
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:rw
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-    networks:
       - monitoring-net
