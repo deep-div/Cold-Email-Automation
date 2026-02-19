@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: metadata-frontend
+  labels:
+    app: metadata-frontend
+
+spec:
+  replicas: 2
+
+  revisionHistoryLimit: 5   # Keep last 5 ReplicaSets for rollback
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1     # At most 1 pod can be down during update
+      maxSurge: 1           # Create 1 extra pod during update
+
+  selector:
+    matchLabels:
+      app: metadata-frontend
+
+  template:
+    metadata:
+      labels:
+        app: metadata-frontend
+
+    spec:
+
+      terminationGracePeriodSeconds: 30  # It tells Kubernetes to wait up to 30 seconds for the pod to shut down gracefully before forcefully killing it.
+
+      containers:
+        - name: metadatafrontend
+          image: deepdiv/metadatafrontend:v1.0
+          imagePullPolicy: Always   
+          ports:
+            - containerPort: 4000
+
+          # Run container as non-root user for better security; Makes filesystem read-only
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000  # Forces container to run as Linux user with UID 1000; Normal users = usually 1000+
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+
+          ## kubectl top pod 
+          # Extremly low for test purposes, to test HPA, Base i saw is 20Mi
+          resources:                    
+            requests:     # minimum guaranteed resources or guranteed space
+              cpu: "20m"                 # Required for HPA calculation, horizontal scaling # 
+              memory: "30Mi"
+            limits:      # maximum allowed usage
+              cpu: "100m"   # CPU limit = speed cap # Not a kill switch.
+              memory: "50Mi"   # Yes — it crashes if crosses
+
+          # Delays container shutdown by 10 seconds so traffic can drain and ongoing requests can finish safely before the pod stops.
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sh", "-c", "sleep 10"]
+
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 4000
+            periodSeconds: 5
+            failureThreshold: 8   # 5 × 8 = 40 seconds allowed for startup
+
+          livenessProbe:     # Auto Restart if Broken  # Active Health Monitoring
+            httpGet:
+              path: /health
+              port: 4000
+            periodSeconds: 10      # Kubernetes runs the health check every 10 seconds.
+            timeoutSeconds: 3      # Kubernetes waits up to 3 seconds for the app to respond before marking the check as failed.
+            failureThreshold: 3    # If the health check fails 3 consecutive times, Kubernetes considers the probe failed and takes action (restart for liveness, mark NotReady for readiness).
+
+
+          readinessProbe:  # Determines whether the pod is ready to receive traffic from the Service
+            httpGet:
+              path: /health        # Kubernetes sends an HTTP GET request to /health
+              port: 4000           # The request is sent to container port 4000
+            initialDelaySeconds: 5 # Wait 5 seconds after container starts before performing the first readiness check
+            periodSeconds: 5       # Run the readiness check every 5 seconds
+            timeoutSeconds: 2      # Wait up to 2 seconds for a response before marking the check as failed
+            failureThreshold: 3    # If the check fails 3 consecutive times, mark the pod as NotReady (removed from Service traffic)
+

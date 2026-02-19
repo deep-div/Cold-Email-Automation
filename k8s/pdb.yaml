@@ -1,0 +1,15 @@
+apiVersion: policy/v1                 # API version for PodDisruptionBudget
+kind: PodDisruptionBudget             # Ensures minimum pod availability
+
+metadata:
+  name: metadata-frontend-pdb         # Name of the PDB
+  labels:
+    app: metadata-frontend            # Label for grouping
+
+spec:
+  minAvailable: 1                     # At least 1 pod must always remain running
+                                      # Even during voluntary disruptions (node drain, upgrades)
+
+  selector:
+    matchLabels:
+      app: metadata-frontend          # Must match Deployment pod labels

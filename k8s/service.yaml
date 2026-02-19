@@ -1,0 +1,23 @@
+apiVersion: v1                       # Core Kubernetes API version for Service resources
+kind: Service                        # Defines a stable network endpoint for a set of Pods
+
+metadata:
+  name: metadata-frontend-service    # Service name (used for internal DNS)
+  labels:
+    app: metadata-frontend           # Label for identifying this Service
+
+spec:
+  type: ClusterIP                    # Exposes service internally within the cluster only
+                                     # (Default type. Not accessible from outside)
+
+  selector:
+    app: metadata-frontend           # Selects Pods with this label
+                                     # Must exactly match Deployment pod template labels
+
+  ports:
+    - name: http                     # Logical name for the port (useful for clarity and future extensions)
+      protocol: TCP                  # Protocol used for communication
+      port: 4000                       # Port exposed by the Service inside the cluster
+                                     # Other pods will call this port
+      targetPort: 4000               # Port on the container (matches containerPort in Deployment)
+                                     # Traffic received on port 80 is forwarded to 4000

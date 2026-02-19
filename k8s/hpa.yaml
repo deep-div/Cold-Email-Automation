@@ -1,0 +1,50 @@
+apiVersion: autoscaling/v2              # Required for advanced metric-based autoscaling
+kind: HorizontalPodAutoscaler           # Defines automatic scaling rules
+
+metadata:
+  name: metadata-frontend-hpa           # Name of the HPA resource
+  labels:
+    app: metadata-frontend              # Label for identification
+
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1                 # Target API version
+    kind: Deployment                    # We are scaling a Deployment
+    name: metadata-frontend             # Must match Deployment name exactly
+
+  minReplicas: 2                        # Never scale below 2 pods
+  maxReplicas: 6                        # Never scale above 6 pods
+
+  metrics:
+    # CPU METRIC 
+    - type: Resource
+      resource:
+        name: cpu                       # Monitor CPU usage
+        target:
+          type: Utilization             # Percentage of requested CPU
+          averageUtilization: 80        # Scale if average CPU > 70% of request
+
+    # MEMORY METRIC 
+    - type: Resource
+      resource:
+        name: memory                    # Monitor Memory usage
+        target:
+          type: Utilization             # Percentage of requested Memory
+          averageUtilization: 80        # Scale if average Memory > 80% of request
+
+  behavior:
+    # SCALE UP BEHAVIOR 
+    scaleUp:
+      stabilizationWindowSeconds: 30    # Wait 30s before scaling up again
+      policies:
+        - type: Percent
+          value: 100                    # Can increase replicas by 100% (double)
+          periodSeconds: 60             # Within a 60-second window
+
+    # SCALE DOWN BEHAVIOR 
+    scaleDown:
+      stabilizationWindowSeconds: 300   # Wait 5 minutes before scaling down
+      policies:
+        - type: Percent
+          value: 50                     # Reduce at most 50% of pods at once
+          periodSeconds: 60             # Within a 60-second window

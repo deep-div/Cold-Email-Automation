@@ -1,0 +1,44 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+metadata:
+  name: metadata-frontend-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/load-balance: "round_robin"   # Load balancing strategy
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"  
+
+spec:
+  ingressClassName: nginx   # Must match installed ingress controller
+
+  # TLS configuration (HTTPS - Port 443)
+  # Only enabled for public domain
+  tls:
+    - hosts:
+        - coldemailgenerator.online   # Public domain secured with HTTPS
+      secretName: coldemailgenerator-tls   # TLS secret containing certificate & key
+
+  rules:
+
+    # Localhost 
+    - host: localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: metadata-frontend-service
+                port:
+                  number: 4000
+
+    # Public Domain 
+    - host: coldemailgenerator.online
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: metadata-frontend-service
+                port:
+                  number: 4000
